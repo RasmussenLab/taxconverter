@@ -1,0 +1,36 @@
+[project]
+name = "taxconverter"
+dynamic = ["version"]
+dependencies = [
+    "pandas == 2.0.0",
+    "loguru == 0.7.2",
+]
+
+[metadata]
+authors = [
+    {name="Svetlana Kutuzova", email="svegal@di.ku.dk"},
+    {name="Simon Rasmussen", email="simon.rasmussen@cpr.ku.dk"}
+]
+url = "https://github.com/RasmussenLab/taxconverter"
+description = "Unifies the presentation of taxonomic classifiers output"
+license = "MIT"
+[tool.setuptools.dynamic]
+version = {attr = "taxconverter.__version__"}
+readme = {file = "README.md"}
+
+[build-system]
+requires = ["setuptools ~= 63.0", "Cython ~= 0.29.5"]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+ignore = ["E722", "E501"]
+
+[project.scripts]
+taxconverter = "taxconverter.__main__:main"
+
+# pyproject.toml
+[tool.pytest.ini_options]
+filterwarnings = [
+    "error",
+    "ignore::UserWarning",
+]

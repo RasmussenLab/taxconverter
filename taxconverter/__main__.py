@@ -1,0 +1,179 @@
+import csv
+import os
+import sys
+import time
+import argparse
+import pandas as pd
+from loguru import logger
+import taxconverter
+
+
+parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(parentdir)
+
+NCBI_LINEAGE = 'data/ncbi_lineage.csv'
+METABULI_LINEAGE = 'data/metabuli_lineage.csv'
+TAXA_LEVELS = ['superkingdom', 'phylum', 'class', 'order', 'family', 'genus', 'species']
+LINEAGE_COL = 'lineage'
+SEQ_COL = 'sequences'
+
+COMMAND_CENTRIFUGE = 'centrifuge'
+COMMAND_KRAKEN = 'kraken2'
+COMMAND_METABULI = 'metabuli'
+
+
+def all_to_mmseqs(df: pd.DataFrame):
+    df['nan'] = 0
+    df[LINEAGE_COL] = df[LINEAGE_COL].fillna('unknown')
+    df['len'] = df[LINEAGE_COL].str.split(';').map(len)
+    df['last'] = df[LINEAGE_COL].str.split(';').str[-1]
+    df['rank'] = df['len'].map(lambda x: TAXA_LEVELS[x-1])
+    df = df[[SEQ_COL, 'nan', 'rank', 'last', 'nan', 'nan', 'nan', 'nan', LINEAGE_COL]]
+    df.columns = list(range(9))
+    return df
+
+
+def convert_to_mmseqs(func):
+    def wrapper(*args, **kwargs):
+        df = func(*args, **kwargs)
+        return all_to_mmseqs(df)
+    return wrapper
+
+
+def ncbi_lineage():
+    begintime = time.time()
+    logger.info("Loading NCBI lineage")
+    df_ncbi = pd.read_csv(NCBI_LINEAGE, quoting=csv.QUOTE_NONE)
+    df_ncbi[LINEAGE_COL] = df_ncbi[TAXA_LEVELS].apply(lambda x: x.str.cat(sep=';'), axis=1)
+    df_ncbi = df_ncbi[['tax_id', LINEAGE_COL]]
+    df_ncbi['tax_id'] = df_ncbi['tax_id'].astype(str)
+    elapsed = round(time.time() - begintime, 2)
+    logger.info(f"Loaded NCBI lineage with {len(df_ncbi)} entries in {elapsed} seconds")
+    return df_ncbi
+
+
+def metabuli_lineage():
+    begintime = time.time()
+    logger.info("Loading Metabuli lineage")
+    df = pd.read_csv(METABULI_LINEAGE)
+    elapsed = round(time.time() - begintime, 2)
+    logger.info(f"Loaded Metabuli lineage with {len(df)} entries in {elapsed} seconds")
+    return df
+
+
+@convert_to_mmseqs
+def kraken_data(filepath: str):
+    df_ncbi = ncbi_lineage()
+    begintime = time.time()
+    df_kraken = pd.read_csv(filepath, header=None, usecols=[1,2], delimiter='\t')
+    df_kraken.columns = ['readID', 'taxID']
+    df_kraken['taxID'] = df_kraken['taxID'].astype(str)
+    df_kraken = pd.merge(df_kraken, df_ncbi, left_on='taxID', right_on='tax_id', how='left')
+    df_kraken[SEQ_COL] = df_kraken['readID']
+    elapsed = round(time.time() - begintime, 2)
+    logger.info(f"Converted Kraken2 to MMseqs2 format in {elapsed} seconds")
+    return df_kraken
+
+
+@convert_to_mmseqs
+def centrifuge_data(filepath: str):
+    df_ncbi = ncbi_lineage()
+    begintime = time.time()
+    df_centrifuge = pd.read_csv(filepath, delimiter='\t', usecols=['readID', 'taxID'])
+    df_centrifuge['taxID'] = df_centrifuge['taxID'].astype(str)
+    df_centrifuge = pd.merge(df_centrifuge, df_ncbi, left_on='taxID', right_on='tax_id', how='left')
+    df_centrifuge[SEQ_COL] = df_centrifuge['readID']
+    elapsed = round(time.time() - begintime, 2)
+    logger.info(f"Converted Centrifuge to MMseqs2 format in {elapsed} seconds")
+    return df_centrifuge
+
+
+@convert_to_mmseqs
+def metabuli_data(
+        filepath_clas: str,
+        filepath_report: str,
+):
+    df_lineage = metabuli_lineage()
+
+    begintime = time.time()
+    df_report = pd.read_csv(filepath_report, delimiter='\t', header=None)
+    map_ids_metabuli = {k: v.strip() for k, v in zip(df_report[4], df_report[5])}
+    
+    df_clas = pd.read_csv(filepath_clas, delimiter='\t', header=None)
+    df_clas['label'] = df_clas[2].map(map_ids_metabuli)
+
+    df_clas_tax = pd.merge(df_clas, df_lineage, left_on='label', right_on='key', how='left')
+    df_clas_tax[SEQ_COL] = df_clas_tax[1]
+    elapsed = round(time.time() - begintime, 2)
+    logger.info(f"Converted Metabuli to MMseqs2 format in {elapsed} seconds")
+    return df_clas_tax
+
+
+def add_one_filepath_arguments(subparser):
+    subparser.add_argument('-i', '--input', dest="input", metavar="", type=str, help="path to the taxonomy annotations")
+    subparser.add_argument('-o', '--output', dest="output", metavar="", type=str, help="path to save the converted annotations")
+
+
+def add_metabuli_arguments(subparser):
+    subparser.add_argument('-c', '--input-clas', dest="clas", metavar="", type=str, help="path to the Metabuli classification file")
+    subparser.add_argument('-r', '--input-report', dest="report", metavar="", type=str, help="path to the Metabuli report file")
+    subparser.add_argument('-o', '--output', dest="output", metavar="", type=str, help="path to save the converted annotations")
+
+
+def main():
+    doc = f"""
+    Version: {'.'.join([str(i) for i in taxconverter.__version__])}
+
+    Convert outputs of Metabuli, Centrifuge and Kraken2 to the MMSeqs2-like format.
+    As a result, an explicit full lineage is avaliable with each sequence id, using GTDB identifiers for Metabuli, NCBI identifiers for Centrifuge and Kraken2."""
+    parser = argparse.ArgumentParser(
+        prog="taxconverter",
+        description=doc,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        add_help=False,
+    )
+    helpos = parser.add_argument_group(title="Help and version", description=None)
+    helpos.add_argument("-h", "--help", help="print help and exit", action="help")
+    helpos.add_argument(
+        "--version",
+        action="version",
+        version=f'Taxconverter {".".join(map(str, taxconverter.__version__))}',
+    )
+
+    subparsers = parser.add_subparsers(dest="subcommand")
+    metabuli = subparsers.add_parser(
+        COMMAND_METABULI,
+        help="""
+        Metabuli to MMSeqs2 format converter
+        """,
+    )
+    add_metabuli_arguments(metabuli)
+
+    kraken = subparsers.add_parser(
+        COMMAND_KRAKEN,
+        help="""
+        Kraken2 to MMSeqs2 format converter
+        """,
+    )
+    add_one_filepath_arguments(kraken)
+
+    centrifuge = subparsers.add_parser(
+        COMMAND_CENTRIFUGE,
+        help="""
+        Centrifuge to MMSeqs2 format converter
+        """,
+    )
+    add_one_filepath_arguments(centrifuge)
+
+    args = parser.parse_args()
+
+    if args.subcommand == COMMAND_CENTRIFUGE:
+        df_result = centrifuge_data(args.input)
+    elif args.subcommand == COMMAND_KRAKEN:
+        df_result = kraken_data(args.input)
+    elif args.subcommand == COMMAND_METABULI:
+        df_result = metabuli_data(args.clas, args.report)
+    else:
+        assert False
+
+    df_result.to_csv(args.output, header=None, sep='\t', index=None)
