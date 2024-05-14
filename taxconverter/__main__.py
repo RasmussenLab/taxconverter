@@ -20,6 +20,7 @@ SEQ_COL = 'sequences'
 COMMAND_CENTRIFUGE = 'centrifuge'
 COMMAND_KRAKEN = 'kraken2'
 COMMAND_METABULI = 'metabuli'
+COMMAND_METAMAPS = 'metamaps'
 
 
 def all_to_mmseqs(df: pd.DataFrame):
@@ -109,6 +110,20 @@ def metabuli_data(
     return df_clas_tax
 
 
+@convert_to_mmseqs
+def metamaps_data(filepath: str):
+    df_ncbi = ncbi_lineage()
+    begintime = time.time()
+    df_metamaps = pd.read_csv(filepath, header=None, usecols=[0,1], delimiter='\t')
+    df_metamaps.columns = ['readID', 'taxID']
+    df_metamaps['taxID'] = df_metamaps['taxID'].astype(str)
+    df_metamaps = pd.merge(df_metamaps, df_ncbi, left_on='taxID', right_on='tax_id', how='left')
+    df_metamaps[SEQ_COL] = df_metamaps['readID']
+    elapsed = round(time.time() - begintime, 2)
+    logger.info(f"Converted Kraken2 to MMseqs2 format in {elapsed} seconds")
+    return df_metamaps
+
+
 def add_one_filepath_arguments(subparser):
     subparser.add_argument('-i', '--input', dest="input", metavar="", type=str, help="path to the taxonomy annotations")
     subparser.add_argument('-o', '--output', dest="output", metavar="", type=str, help="path to save the converted annotations")
@@ -165,6 +180,14 @@ def main():
     )
     add_one_filepath_arguments(centrifuge)
 
+    metamaps = subparsers.add_parser(
+        COMMAND_METAMAPS,
+        help="""
+        MetaMaps to MMSeqs2 format converter
+        """,
+    )
+    add_one_filepath_arguments(metamaps)
+
     args = parser.parse_args()
 
     if args.subcommand == COMMAND_CENTRIFUGE:
@@ -173,6 +196,8 @@ def main():
         df_result = kraken_data(args.input)
     elif args.subcommand == COMMAND_METABULI:
         df_result = metabuli_data(args.clas, args.report)
+    elif args.subcommand == COMMAND_METAMAPS:
+        df_result = metamaps_data(args.input)
     else:
         assert False
 
