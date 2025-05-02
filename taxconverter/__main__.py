@@ -11,10 +11,14 @@ import taxconverter
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(parentdir)
 
-NCBI_LINEAGE = os.path.join(parentdir, 'data/ncbi_lineage.csv')
+NCBI_LINEAGE = os.path.join(parentdir, 'data/clades.tsv')
 METABULI_LINEAGE = os.path.join(parentdir, 'data/metabuli_lineage.csv')
 
 TAXA_LEVELS = ['superkingdom', 'phylum', 'class', 'order', 'family', 'genus', 'species']
+CHILD_ID = 'child_id'
+PARENT_ID = 'parent_id'
+CHILD_RANK = 'child_rank'
+NAME = 'name'
 LINEAGE_COL = 'lineage'
 SEQ_COL = 'sequences'
 
@@ -27,7 +31,7 @@ COMMAND_MMSEQS = 'mmseqs2'
 
 def all_to_mmseqs(df: pd.DataFrame):
     df['nan'] = 0
-    df[LINEAGE_COL] = df[LINEAGE_COL].fillna('unknown')
+    df[LINEAGE_COL] = df[LINEAGE_COL].fillna('')
     df['len'] = df[LINEAGE_COL].str.split(';').map(len)
     df['last'] = df[LINEAGE_COL].str.split(';').str[-1]
     df['rank'] = df['len'].map(lambda x: TAXA_LEVELS[x-1])
@@ -37,22 +41,38 @@ def all_to_mmseqs(df: pd.DataFrame):
 
 
 def all_to_taxvamb(df: pd.DataFrame):
-    df[LINEAGE_COL] = df[LINEAGE_COL].fillna('unknown')
+    df[LINEAGE_COL] = df[LINEAGE_COL].fillna('')
     df = df[[SEQ_COL, LINEAGE_COL]]
     df.columns = ['contigs', 'predictions']
     return df
 
+# def ncbi_lineage():
+#     begintime = time.time()
+#     logger.info("Loading NCBI lineage")
+#     df_ncbi = pd.read_csv(NCBI_LINEAGE, quoting=csv.QUOTE_NONE)
+#     df_ncbi[LINEAGE_COL] = df_ncbi[TAXA_LEVELS].apply(lambda x: x.str.cat(sep=';'), axis=1)
+#     df_ncbi = df_ncbi[['tax_id', LINEAGE_COL]]
+#     df_ncbi['tax_id'] = df_ncbi['tax_id'].astype(str)
+#     elapsed = round(time.time() - begintime, 2)
+#     logger.info(f"Loaded NCBI lineage with {len(df_ncbi)} entries in {elapsed} seconds")
+#     return df_ncbi
 
 def ncbi_lineage():
     begintime = time.time()
     logger.info("Loading NCBI lineage")
-    df_ncbi = pd.read_csv(NCBI_LINEAGE, quoting=csv.QUOTE_NONE)
-    df_ncbi[LINEAGE_COL] = df_ncbi[TAXA_LEVELS].apply(lambda x: x.str.cat(sep=';'), axis=1)
-    df_ncbi = df_ncbi[['tax_id', LINEAGE_COL]]
-    df_ncbi['tax_id'] = df_ncbi['tax_id'].astype(str)
+    df_ncbi = pd.read_csv(NCBI_LINEAGE, quoting=csv.QUOTE_NONE, sep='\t')
+    map_child_parent = {k: v for k, v in zip(df_ncbi[CHILD_ID].astype(str), df_ncbi[PARENT_ID].astype(str))}
     elapsed = round(time.time() - begintime, 2)
-    logger.info(f"Loaded NCBI lineage with {len(df_ncbi)} entries in {elapsed} seconds")
-    return df_ncbi
+    logger.info(f"Loaded NCBI lineage with {len(map_child_parent)} entries in {elapsed} seconds")
+    return map_child_parent
+
+
+def get_lineage(tax_id, map_child_parent):
+    lineage = []
+    while tax_id != '1':
+        lineage.append(tax_id)
+        tax_id = map_child_parent.get(tax_id, '1')
+    return ';'.join(lineage[::-1])
 
 
 def metabuli_lineage():
@@ -161,14 +181,14 @@ def main():
 
     @convert_to_unified(args.mmseqs)
     def centrifuge_data(filepath: str):
-        df_ncbi = ncbi_lineage()
+        map_ncbi = ncbi_lineage()
         begintime = time.time()
         df_centrifuge = pd.read_csv(filepath, delimiter='\t', usecols=['readID', 'taxID'])
         df_centrifuge['taxID'] = df_centrifuge['taxID'].astype(str)
-        df_centrifuge = pd.merge(df_centrifuge, df_ncbi, left_on='taxID', right_on='tax_id', how='left')
+        df_centrifuge[LINEAGE_COL] = df_centrifuge['taxID'].map(lambda x: get_lineage(x, map_ncbi))
         df_centrifuge[SEQ_COL] = df_centrifuge['readID']
         elapsed = round(time.time() - begintime, 2)
-        logger.info(f"Converted Centrifuge to MMseqs2 format in {elapsed} seconds")
+        logger.info(f"Converted Centrifuge to TaxVAMB/Taxometer format in {elapsed} seconds")
         return df_centrifuge
 
 
@@ -189,7 +209,7 @@ def main():
         df_clas_tax = pd.merge(df_clas, df_lineage, left_on='label', right_on='key', how='left')
         df_clas_tax[SEQ_COL] = df_clas_tax[1]
         elapsed = round(time.time() - begintime, 2)
-        logger.info(f"Converted Metabuli to MMseqs2 format in {elapsed} seconds")
+        logger.info(f"Converted Metabuli to TaxVAMB/Taxometer format in {elapsed} seconds")
         return df_clas_tax
 
 
@@ -203,7 +223,7 @@ def main():
         df_metamaps = pd.merge(df_metamaps, df_ncbi, left_on='taxID', right_on='tax_id', how='left')
         df_metamaps[SEQ_COL] = df_metamaps['readID']
         elapsed = round(time.time() - begintime, 2)
-        logger.info(f"Converted Kraken2 to MMseqs2 format in {elapsed} seconds")
+        logger.info(f"Converted MetaMaps to TaxVAMB/Taxometer format in {elapsed} seconds")
         return df_metamaps
 
 
@@ -214,20 +234,20 @@ def main():
         df_mmseqs[SEQ_COL] = df_mmseqs[0]
         df_mmseqs[LINEAGE_COL] = df_mmseqs[8]
         elapsed = round(time.time() - begintime, 2)
-        logger.info(f"Converted MMseqs2 format in {elapsed} seconds")
+        logger.info(f"Converted MMseqs2 to TaxVAMB/Taxometer format in {elapsed} seconds")
         return df_mmseqs
     
     @convert_to_unified(args.mmseqs)
     def kraken_data(filepath: str):
-        df_ncbi = ncbi_lineage()
+        map_ncbi = ncbi_lineage()
         begintime = time.time()
         df_kraken = pd.read_csv(filepath, header=None, usecols=[1,2], delimiter='\t')
         df_kraken.columns = ['readID', 'taxID']
         df_kraken['taxID'] = df_kraken['taxID'].astype(str)
-        df_kraken = pd.merge(df_kraken, df_ncbi, left_on='taxID', right_on='tax_id', how='left')
         df_kraken[SEQ_COL] = df_kraken['readID']
+        df_kraken[LINEAGE_COL] = df_kraken['taxID'].map(lambda x: get_lineage(x, map_ncbi))
         elapsed = round(time.time() - begintime, 2)
-        logger.info(f"Converted Kraken2 to MMseqs2 format in {elapsed} seconds")
+        logger.info(f"Converted Kraken2 to TaxVAMB/Taxometer format in {elapsed} seconds")
         return df_kraken
 
     if args.subcommand == COMMAND_CENTRIFUGE:
