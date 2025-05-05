@@ -46,16 +46,6 @@ def all_to_taxvamb(df: pd.DataFrame):
     df.columns = ['contigs', 'predictions']
     return df
 
-# def ncbi_lineage():
-#     begintime = time.time()
-#     logger.info("Loading NCBI lineage")
-#     df_ncbi = pd.read_csv(NCBI_LINEAGE, quoting=csv.QUOTE_NONE)
-#     df_ncbi[LINEAGE_COL] = df_ncbi[TAXA_LEVELS].apply(lambda x: x.str.cat(sep=';'), axis=1)
-#     df_ncbi = df_ncbi[['tax_id', LINEAGE_COL]]
-#     df_ncbi['tax_id'] = df_ncbi['tax_id'].astype(str)
-#     elapsed = round(time.time() - begintime, 2)
-#     logger.info(f"Loaded NCBI lineage with {len(df_ncbi)} entries in {elapsed} seconds")
-#     return df_ncbi
 
 def ncbi_lineage():
     begintime = time.time()
@@ -237,6 +227,7 @@ def main():
         logger.info(f"Converted MMseqs2 to TaxVAMB/Taxometer format in {elapsed} seconds")
         return df_mmseqs
     
+
     @convert_to_unified(args.mmseqs)
     def kraken_data(filepath: str):
         map_ncbi = ncbi_lineage()
