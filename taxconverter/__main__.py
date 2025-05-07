@@ -58,10 +58,16 @@ def ncbi_lineage():
 
 
 def get_lineage(tax_id, map_child_parent):
+    if tax_id not in map_child_parent:
+        logger.info(f"ID not found in NCBI lineage: {tax_id}")
+        return ''
     lineage = []
-    while tax_id != '1':
+    while tax_id in map_child_parent and tax_id != '1':
         lineage.append(tax_id)
-        tax_id = map_child_parent.get(tax_id, '1')
+        tax_id = map_child_parent[tax_id]
+    if tax_id != '1':
+        logger.info(f"Parent node warning: {tax_id} is the root, but does not stem from 1. Returning empty lineage.")
+        return ''
     return ';'.join(lineage[::-1])
 
 
