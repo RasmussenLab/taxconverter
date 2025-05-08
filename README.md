@@ -8,15 +8,20 @@ IMPORTANT: if you come from the Taxometer README page (https://github.com/Rasmus
 Suggestions and contributions are most welcome.
 
 ## Installation
-Clone this repo and install the package from the source (releasing `pip` package WIP). 
+
+The package is compatible with Python version <=3.11.
+
+```
+pip install taxconverter
+```
+
+Or clone this repo and install the package from the source. 
 
 ```
 git clone git@github.com:RasmussenLab/taxconverter.git
 cd taxconverter
 pip install -e .
 ```
-
-The package is compatible with Python version <=3.11.
 
 ## Usage
 To convert Centrifuge, Kraken2, MetaMaps and MMSeqs2 outputs, provide one file with the taxonomy annotation results:

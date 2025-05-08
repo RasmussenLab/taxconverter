@@ -11,10 +11,13 @@ dependencies = [
 [metadata]
 authors = [
     {name="Svetlana Kutuzova", email="svegal@di.ku.dk"},
+    {name="Jakob Nybo Nissen", email="jakob.nissen@sund.ku.dk"},
+    {name="Lasse Schnell Danielsen", email="lasse.danielsen@sund.ku.dk"},
     {name="Simon Rasmussen", email="simon.rasmussen@cpr.ku.dk"}
 ]
 url = "https://github.com/RasmussenLab/taxconverter"
 description = "Unifies the presentation of taxonomic classifiers output"
+long_description = "Unifies the presentation of taxonomic classifiers outputs. Works with Kraken2, MMSeqs2, Centrifuge, Metabuli."
 license = "MIT"
 [tool.setuptools.dynamic]
 version = {attr = "taxconverter.__version__"}
