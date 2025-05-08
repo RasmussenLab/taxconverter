@@ -6,19 +6,21 @@ import argparse
 import pandas as pd
 from loguru import logger
 import taxconverter
+from pathlib import Path
 
 
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(parentdir)
 
 NCBI_LINEAGE = os.path.join(parentdir, 'data/clades.tsv')
-METABULI_LINEAGE = os.path.join(parentdir, 'data/metabuli_lineage.csv')
+METABULI_LINEAGE = os.path.join(parentdir, 'data/metabuli_lineage220.tsv')
 
 TAXA_LEVELS = ['superkingdom', 'phylum', 'class', 'order', 'family', 'genus', 'species']
 CHILD_ID = 'child_id'
 PARENT_ID = 'parent_id'
 CHILD_RANK = 'child_rank'
 NAME = 'name'
+KEY_COL = 'key'
 LINEAGE_COL = 'lineage'
 SEQ_COL = 'sequences'
 
@@ -58,6 +60,9 @@ def ncbi_lineage():
 
 
 def get_lineage(tax_id, map_child_parent):
+    if tax_id == 0 or tax_id == 1:
+        logger.info(f"No lineage for ID: {tax_id}")
+        return ''
     if tax_id not in map_child_parent:
         logger.info(f"ID not found in NCBI lineage: {tax_id}")
         return ''
@@ -74,7 +79,8 @@ def get_lineage(tax_id, map_child_parent):
 def metabuli_lineage():
     begintime = time.time()
     logger.info("Loading Metabuli lineage")
-    df = pd.read_csv(METABULI_LINEAGE)
+    df = pd.read_csv(METABULI_LINEAGE, delimiter='\t', quoting=csv.QUOTE_NONE, header=None)
+    df.columns = [KEY_COL, LINEAGE_COL]
     elapsed = round(time.time() - begintime, 2)
     logger.info(f"Loaded Metabuli lineage with {len(df)} entries in {elapsed} seconds")
     return df
@@ -96,6 +102,30 @@ def add_metabuli_arguments(subparser):
     subparser.add_argument('-o', '--output', dest="output", metavar="", type=str, help="path to save the converted annotations")
     add_format_arguments(subparser)
 
+
+def metabuli_lineage(filepath_clas: Path, filepath_report: Path):
+    begintime = time.time()
+    logger.info("Loading Metabuli lineage")
+    curr_taxonomy = []
+    tax_id2taxonomy = {}
+    with open(filepath_report) as f:
+        for line in f:
+            id_line = line.split("\t")[4].strip()
+            line = line.split("\t")[5].rstrip()
+            curr_space = len(line.split(" ")) - 1
+            while len(curr_taxonomy) - 1 < curr_space:
+                curr_taxonomy.append("")
+            curr_taxonomy[curr_space] = line
+            to_add = []
+            for i, entry in enumerate(curr_taxonomy):
+                if i > curr_space:
+                    break
+                to_add.append(entry)
+            tax_id2taxonomy[id_line] = ";".join([x.strip() for x in to_add if x != ""])
+    elapsed = round(time.time() - begintime, 2)
+    logger.info(f"Loaded Metabuli dataset-specific lineage with {len(tax_id2taxonomy)} entries in {elapsed} seconds")
+    return tax_id2taxonomy
+    
 
 def main():
 
@@ -190,20 +220,19 @@ def main():
 
     @convert_to_unified(args.mmseqs)
     def metabuli_data(
-            filepath_clas: str,
-            filepath_report: str,
+            filepath_clas: Path,
+            filepath_report: Path,
     ):
-        df_lineage = metabuli_lineage()
+        map_lineage = metabuli_lineage(filepath_clas, filepath_report)
 
         begintime = time.time()
-        df_report = pd.read_csv(filepath_report, delimiter='\t', header=None)
-        map_ids_metabuli = {k: v.strip() for k, v in zip(df_report[4], df_report[5])}
         
         df_clas = pd.read_csv(filepath_clas, delimiter='\t', header=None)
-        df_clas['label'] = df_clas[2].map(map_ids_metabuli)
-
-        df_clas_tax = pd.merge(df_clas, df_lineage, left_on='label', right_on='key', how='left')
-        df_clas_tax[SEQ_COL] = df_clas_tax[1]
+        df_clas[LINEAGE_COL] = df_clas[2].astype(str).map(map_lineage)
+        df_clas[LINEAGE_COL] = df_clas[LINEAGE_COL].replace("unclassified", "")
+        df_clas[LINEAGE_COL] = df_clas[LINEAGE_COL].str.replace('root;', '', regex=False)
+        df_clas[SEQ_COL] = df_clas[1]
+        df_clas_tax = df_clas[[SEQ_COL, LINEAGE_COL]]
         elapsed = round(time.time() - begintime, 2)
         logger.info(f"Converted Metabuli to TaxVAMB/Taxometer format in {elapsed} seconds")
         return df_clas_tax
