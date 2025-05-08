@@ -3,6 +3,7 @@ name = "taxconverter"
 dynamic = ["version"]
 dependencies = [
     "pandas == 2.0.0",
+    "numpy == 1.26.4",
     "loguru == 0.7.2",
 ]
 
