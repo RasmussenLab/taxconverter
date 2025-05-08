@@ -1,5 +1,5 @@
 # Taxconverter
-A lightweight tool for one purpose only: to unify the outputs of different taxonomic classifiers. Currently supports MMseqs2, Centrifuge v1.0.4, Kraken2 v2.1.3, Metabuli v1.0.1, MetaMaps v.633d2e. The output files of these tools are converted to `contigs    predictions` format.
+A lightweight tool for one purpose only: to unify the outputs of different taxonomic classifiers. Currently supports MMseqs2, Centrifuge v1.0.4, Kraken2 v2.1.3, Metabuli v1.1.0, MetaMaps v.633d2e. The output files of these tools are converted to `contigs    predictions` format.
 
 The tab-delimitered output file has two columns: sequence identifiers (the 1st column, `contigs`) and taxonomic labels on all levels from domain to species concatenated with ";" (`predictions`). 
 
@@ -15,8 +15,6 @@ git clone git@github.com:RasmussenLab/taxconverter.git
 cd taxconverter
 pip install -e .
 ```
-
-2) Unzip the two files from `data/lineage.zip` (38.3 MB): `ncbi_lineage.csv` (246.2 MB) and `metabuli_lineage.csv` (58.1 MB), and place them to the `data/` folder.
 
 ## Usage
 To convert Centrifuge, Kraken2, MetaMaps and MMSeqs2 outputs, provide one file with the taxonomy annotation results:
