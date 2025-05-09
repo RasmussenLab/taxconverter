@@ -27,7 +27,7 @@ readme = {file = "README.md"}
 requires = ["setuptools ~= 63.0", "Cython ~= 0.29.5"]
 build-backend = "setuptools.build_meta"
 
-[tool.ruff]
+[tool.ruff.lint]
 ignore = ["E722", "E501"]
 
 [project.scripts]
