@@ -39,3 +39,9 @@ filterwarnings = [
     "error",
     "ignore::UserWarning",
 ]
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.setuptools.package-data]
+"taxconverter" = ["data/clades.tsv"]
