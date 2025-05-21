@@ -72,9 +72,9 @@ def ncbi_lineage():
     return map_child_parent
 
 
-def get_lineage(tax_id, map_child_parent):
-    if tax_id == 0 or tax_id == 1:
-        logger.info(f"No lineage for ID: {tax_id}")
+def get_lineage(tax_id: str, map_child_parent: dict[str, str]):
+    assert isinstance(tax_id, str)
+    if tax_id == '0' or tax_id == '1':
         return ''
     if tax_id not in map_child_parent:
         logger.info(f"ID not found in NCBI lineage: {tax_id}")
