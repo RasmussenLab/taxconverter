@@ -219,10 +219,6 @@ def metabuli_from_iter(lines: Iterable[str]) -> dict[int, str]:
         if stripped_clade in clade_to_lineage:
             raise ValueError(f'Duplicate clade seen: "{stripped_clade}"')
 
-        # May or may not appear in output, but we need to ignore this if it's there.
-        if stripped_clade == "unclassified":
-            continue
-
         if ";" in stripped_clade:
             raise ValueError(
                 f'Semicolon cannot appear in clade name "{stripped_clade}"'
