@@ -386,6 +386,7 @@ def main():
         df_clas[LINEAGE_COL] = tax_ids.map(map_lineage)
         df_clas[LINEAGE_COL] = df_clas[LINEAGE_COL].replace("unclassified", "")
         df_clas[LINEAGE_COL] = df_clas[LINEAGE_COL].str.replace('root;', '', regex=False)
+        df_clas[LINEAGE_COL] = df_clas[LINEAGE_COL].str.replace('root', '', regex=False)
         df_clas[SEQ_COL] = df_clas[1]
         df_clas_tax = df_clas[[SEQ_COL, LINEAGE_COL]]
         elapsed = round(time.time() - begintime, 2)
