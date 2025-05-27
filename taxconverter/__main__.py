@@ -73,8 +73,9 @@ def ncbi_lineage():
 
 
 def get_lineage(tax_id, map_child_parent):
-    if tax_id == 0 or tax_id == 1:
-        logger.info(f"No lineage for ID: {tax_id}")
+    if tax_id == '0':
+        return 'unknown'
+    if tax_id == '1':
         return ''
     if tax_id not in map_child_parent:
         logger.info(f"ID not found in NCBI lineage: {tax_id}")
