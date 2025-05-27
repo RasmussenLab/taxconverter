@@ -20,6 +20,7 @@ Or clone this repo and install the package from the source.
 ```
 git clone git@github.com:RasmussenLab/taxconverter.git
 cd taxconverter
+gzip --decompress data/clades.tsv.gz
 pip install -e .
 ```
 
