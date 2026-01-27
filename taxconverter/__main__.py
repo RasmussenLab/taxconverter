@@ -92,15 +92,15 @@ def add_format_arguments(subparser):
 
 
 def add_one_filepath_arguments(subparser):
-    subparser.add_argument('-i', '--input', dest="input", metavar="", type=str, help="path to the taxonomy annotations")
-    subparser.add_argument('-o', '--output', dest="output", metavar="", type=str, help="path to save the converted annotations")
+    subparser.add_argument('-i', '--input', dest="input", metavar="", required=True, type=str, help="path to the taxonomy annotations")
+    subparser.add_argument('-o', '--output', dest="output", required=True, metavar="", type=str, help="path to save the converted annotations")
     add_format_arguments(subparser)
 
 
 def add_metabuli_arguments(subparser):
     subparser.add_argument('-c', '--input-clas', dest="clas", metavar="", type=str, help="path to the Metabuli classification file")
     subparser.add_argument('-r', '--input-report', dest="report", metavar="", type=str, help="path to the Metabuli report file")
-    subparser.add_argument('-o', '--output', dest="output", metavar="", type=str, help="path to save the converted annotations")
+    subparser.add_argument('-o', '--output', dest="output", metavar="", required=True, type=str, help="path to save the converted annotations")
     add_format_arguments(subparser)
 
 
