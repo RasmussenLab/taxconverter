@@ -3,9 +3,9 @@ name = "taxconverter"
 dynamic = ["version"]
 requires-python = "<3.12"
 dependencies = [
-    "pandas == 2.0.0",
-    "numpy == 1.26.4",
-    "loguru == 0.7.2",
+    "pandas ~= 3.0.0",
+    "numpy ~= 2.0.0",
+    "loguru == 0.7.3",
 ]
 
 [metadata]
@@ -22,10 +22,6 @@ license = "MIT"
 [tool.setuptools.dynamic]
 version = {attr = "taxconverter.__version__"}
 readme = {file = "README.md"}
-
-[build-system]
-requires = ["setuptools ~= 63.0", "Cython ~= 0.29.5"]
-build-backend = "setuptools.build_meta"
 
 [tool.ruff.lint]
 ignore = ["E722", "E501"]
