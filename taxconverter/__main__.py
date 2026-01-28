@@ -11,9 +11,8 @@ from typing import Iterable
 import itertools
 
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(parentdir)
 
-NCBI_LINEAGE = os.path.join(parentdir, 'data/clades.tsv')
+NCBI_LINEAGE_PATH = os.path.join(parentdir, 'data' ,'clades.tsv')
 
 TAXA_LEVELS = ['superkingdom', 'phylum', 'class', 'order', 'family', 'genus', 'species']
 CHILD_ID = 'child_id'
@@ -43,7 +42,6 @@ METABULI_CANONICAL_RANKS = {
 }
 
 
-
 def all_to_mmseqs(df: pd.DataFrame):
     df['nan'] = 0
     df[LINEAGE_COL] = df[LINEAGE_COL].fillna('')
@@ -53,7 +51,6 @@ def all_to_mmseqs(df: pd.DataFrame):
     df = df[[SEQ_COL, 'nan', 'rank', 'last', 'nan', 'nan', 'nan', 'nan', LINEAGE_COL]]
     df.columns = list(range(9))
     return df
-
 
 def all_to_taxvamb(df: pd.DataFrame):
     df[LINEAGE_COL] = df[LINEAGE_COL].fillna('')
@@ -65,7 +62,7 @@ def all_to_taxvamb(df: pd.DataFrame):
 def ncbi_lineage():
     begintime = time.time()
     logger.info("Loading NCBI lineage")
-    df_ncbi = pd.read_csv(NCBI_LINEAGE, quoting=csv.QUOTE_NONE, sep='\t')
+    df_ncbi = pd.read_csv(NCBI_LINEAGE_PATH, quoting=csv.QUOTE_NONE, sep='\t')
     map_child_parent = {k: v for k, v in zip(df_ncbi[CHILD_ID].astype(str), df_ncbi[PARENT_ID].astype(str))}
     elapsed = round(time.time() - begintime, 2)
     logger.info(f"Loaded NCBI lineage with {len(map_child_parent)} entries in {elapsed} seconds")
