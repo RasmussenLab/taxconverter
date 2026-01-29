@@ -2,7 +2,8 @@ from pathlib import Path
 from typing import Iterable
 from taxconverter.common import NCBIRanks, NCBIAnnotation, UnvalidatedIntAnnotation
 
-# Krona specification from https://github.com/marbl/Krona/wiki/Importing-NCBI-Taxonomy-IDs
+# Metamaps uses a Krona-formatted file, and links to spec from Krona website:
+# https://github.com/marbl/Krona/wiki/Importing-NCBI-Taxonomy-IDs
 
 
 def parse_metamaps_krona(
@@ -29,7 +30,7 @@ def parse_metamaps_krona(
             err = ValueError(
                 f"In Krona file at {path} on line {line_number}, could not parse annotation as integer"
             )
-            raise ValueError(err) from None
+            raise err from None
 
         # Annoyingly, this is undocumented in the krona format,
         # but Metamaps encodes a missing annotation as taxid zero.

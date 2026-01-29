@@ -1,278 +1,138 @@
-import csv
-import os
-import sys
-import time
-import argparse
-import pandas as pd
 from loguru import logger
 import taxconverter
 from pathlib import Path
-from typing import Iterable
-import itertools
+import argparse
+from typing import Optional
+from contextlib import nullcontext
+import sys
 
-parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# This file is stored in the manifest, and is required for this package
+# to work correctly. It should automatically be downloaded when the package is.
+NCBI_LINEAGE_PATH = Path(__file__).absolute().parent.parent / "data" / "clades.tsv.gz"
 
-NCBI_LINEAGE_PATH = os.path.join(parentdir, 'data' ,'clades.tsv')
+# List of supported subcommands
+COMMAND_CENTRIFUGE = "centrifuge"
+COMMAND_KRAKEN = "kraken2"
+COMMAND_METABULI = "metabuli"
+COMMAND_METAMAPS = "metamaps"
+COMMAND_MMSEQS = "mmseqs2"
 
-TAXA_LEVELS = ['superkingdom', 'phylum', 'class', 'order', 'family', 'genus', 'species']
-CHILD_ID = 'child_id'
-PARENT_ID = 'parent_id'
-CHILD_RANK = 'child_rank'
-NAME = 'name'
-KEY_COL = 'key'
-LINEAGE_COL = 'lineage'
-SEQ_COL = 'sequences'
+CLI_DOCUMENTATION = f"""
+Version: {".".join([str(i) for i in taxconverter.__version__])}
 
-COMMAND_CENTRIFUGE = 'centrifuge'
-COMMAND_KRAKEN = 'kraken2'
-COMMAND_METABULI = 'metabuli'
-COMMAND_METAMAPS = 'metamaps'
-COMMAND_MMSEQS = 'mmseqs2'
+Convert outputs of Metabuli, Centrifuge and Kraken2 to the unified format. The format is "contigs\tpredictions" and is accepted by TaxVAMB tool.
+Important: for the older release of Taxometer that uses MMSeqs2-like files, use the --mmseqs-format flag.
+As a result, an explicit full lineage is avaliable with each sequence id, using GTDB identifiers for Metabuli and MMSeqs2, NCBI identifiers for Centrifuge and Kraken2."""
 
-METABULI_CANONICAL_RANKS = {
-    "no rank": 0,
-    "superkingdom": 1,
-    "phylum": 2,
-    "class": 3,
-    "order": 4,
-    "family": 5,
-    "genus": 6,
-    "species": 7,
-    "subspecies": 8,
-}
+def format_log(record) -> str:
+    colors = {"WARNING": "red", "INFO": "green", "DEBUG": "blue", "ERROR": "red"}
+    L = colors.get(record["level"].name, "blue")
+    T = "red" if record["level"].name in ("WARNING", "ERROR") else "cyan"
+    message = "<red>{message}</red>" if T == "red" else "{message}"
+    time = f"<{T}>{{time:YYYY-MM-DD HH:mm:ss.SSS}}</{T}>"
+    level = f"<b><{L}>{{level:<7}}</{L}></b>"
+    return f"{time} | {level} | {message}\n{{exception}}"
 
 
-def all_to_mmseqs(df: pd.DataFrame):
-    df['nan'] = 0
-    df[LINEAGE_COL] = df[LINEAGE_COL].fillna('')
-    df['len'] = df[LINEAGE_COL].str.split(';').map(len)
-    df['last'] = df[LINEAGE_COL].str.split(';').str[-1]
-    df['rank'] = df['len'].map(lambda x: TAXA_LEVELS[x-1])
-    df = df[[SEQ_COL, 'nan', 'rank', 'last', 'nan', 'nan', 'nan', 'nan', LINEAGE_COL]]
-    df.columns = list(range(9))
-    return df
+# Replace default stderr logger with the one specified in format log above
+logger.remove()
+logger.add(sys.stderr, format=format_log)
 
-def all_to_taxvamb(df: pd.DataFrame):
-    df[LINEAGE_COL] = df[LINEAGE_COL].fillna('')
-    df = df[[SEQ_COL, LINEAGE_COL]]
-    df.columns = ['contigs', 'predictions']
-    return df
-
-
-def ncbi_lineage():
-    begintime = time.time()
-    logger.info("Loading NCBI lineage")
-    df_ncbi = pd.read_csv(NCBI_LINEAGE_PATH, quoting=csv.QUOTE_NONE, sep='\t')
-    map_child_parent = {k: v for k, v in zip(df_ncbi[CHILD_ID].astype(str), df_ncbi[PARENT_ID].astype(str))}
-    elapsed = round(time.time() - begintime, 2)
-    logger.info(f"Loaded NCBI lineage with {len(map_child_parent)} entries in {elapsed} seconds")
-    return map_child_parent
-
-
-def get_lineage(tax_id: str, map_child_parent: dict[str, str]):
-    if tax_id == '0' or tax_id == '1':
-        return ''
-    if tax_id not in map_child_parent:
-        logger.info(f"ID not found in NCBI lineage: {tax_id}")
-        return ''
-    lineage = []
-    while tax_id in map_child_parent and tax_id != '1':
-        lineage.append(tax_id)
-        tax_id = map_child_parent[tax_id]
-    if tax_id != '1':
-        logger.info(f"Parent node warning: {tax_id} is the root, but does not stem from 1. Returning empty lineage.")
-        return ''
-    return ';'.join(lineage[::-1])
-
-def add_format_arguments(subparser):
-    subparser.add_argument('-m', '--mmseqs-format', dest="mmseqs", action='store_true', help="convert to MMSeqs2 format (if you are using Taxometer)")
-
-
-def add_one_filepath_arguments(subparser):
-    subparser.add_argument('-i', '--input', dest="input", metavar="", required=True, type=str, help="path to the taxonomy annotations")
-    subparser.add_argument('-o', '--output', dest="output", required=True, metavar="", type=str, help="path to save the converted annotations")
-    add_format_arguments(subparser)
-
-
-def add_metabuli_arguments(subparser):
-    subparser.add_argument('-c', '--input-clas', dest="clas", metavar="", type=str, help="path to the Metabuli classification file")
-    subparser.add_argument('-r', '--input-report', dest="report", metavar="", type=str, help="path to the Metabuli report file")
-    subparser.add_argument('-o', '--output', dest="output", metavar="", required=True, type=str, help="path to save the converted annotations")
-    add_format_arguments(subparser)
-
-
-def check_float(lineno: int, s: str) -> float:
-    try:
-        return float(s)
-    except ValueError:
-        err = ValueError(
-            f'On line {lineno}, could not parse column 0 as float: "{s}", perhaps format is wrong'
+def load_ncbi() -> taxconverter.common.NCBIRanks:
+    if not NCBI_LINEAGE_PATH.is_file():
+        raise FileNotFoundError(
+            f"Could not find Taxconverter lineage path at {NCBI_LINEAGE_PATH}.\n"
+            "This file ought to come automatically with the Taxconverter installation,"
+            "and is needed to extract full lineages from NCBI identifiers.\n"
+            "Please manually download the file at github.com/RasmussenLab/taxconverter "
+            "under 'Releases', and place it in the path as given above."
         )
-        raise err from None
+    logger.info("Loading NCBI lineages.")
+    ncbi = taxconverter.common.NCBIRanks.from_file(NCBI_LINEAGE_PATH)
+    logger.info("\tDone loading NCBI lineages")
+    return ncbi
 
 
-def check_int(lineno: int, s: str) -> int:
-    f = check_float(lineno, s)
-    if not f.is_integer():
-        raise ValueError(
-            f"On line {lineno}, numerical value is not integer: {s}, perhaps format is wrong."
-        )
-    return int(f)
-
-
-def clean_result(clade_to_lineage: dict[int, list[str]], start_time: float) -> dict[int, str]:
-    # Check if all have the same root name - if so, we delete it, since it's not really canonical
-    if len(clade_to_lineage) > 0:
-        all_same = True
-        root_name = next(iter(clade_to_lineage.values()))
-        for v in clade_to_lineage.values():
-            if v[0] != root_name:
-                all_same = False
-                break
-
-        if all_same:
-            for v in clade_to_lineage.values():
-                v.pop(0)
-
-    result = {k: ";".join(v) for (k, v) in clade_to_lineage.items()}
-    elapsed = time.time() - start_time
-    
-    logger.info(
-        f"Loaded Metabuli dataset-specific lineage with {len(clade_to_lineage)} "
-        f"entries in {elapsed:.2f} seconds"
-
-    )
-    return result
-
-
-def metabuli_lineage(metabuli_report: Path) -> dict[int, str]:
-    # Avoid an indentation level
-    with open(metabuli_report) as file:
-        return metabuli_from_iter(file)
-
-def metabuli_from_iter(lines: Iterable[str]) -> dict[int, str]:
-    start_time = time.time()
-    clade_to_lineage: dict[int, list[str]] = dict()
-
-    # Cache of last seen ranks - we need this to build the full lineage, since only
-    # the current node is listed on each line, we need to keep track of its descendants
-    ranks: list[str] = [""] * len(METABULI_CANONICAL_RANKS)
-    last_rank_index = -1  # placeholder
-
-    # Metabuli commit a17debb (2025-05-08) added a header to the file. So, the format may
-    # or may not have the header depending on the version of Metabuli used.
-    # Furthermore, the order of fields in this file have changed in the past, so we must
-    # be fairly strict with parsing this file to avoid creating nonsense
-    header = next(iter(lines), None)
-    if header is None:
-        return clean_result({}, start_time)
-    elif header.strip() == "#clade_proportion\tclade_count\ttaxon_count\trank\ttaxID\tname":
-        line_delta = 2
-        iterator = lines
+def write_generic_output(
+    destination: Optional[Path],
+    annotations: list[taxconverter.common.GenericAnnotation],
+    unassigned_clade_name: str,
+):
+    dst_str = "stdout" if destination is None else destination
+    logger.info(f"Writing output to {dst_str}")
+    # Allow using a with-statement to safely close the file, but when
+    # destination is None, do not close.
+    if destination is None:
+        context = nullcontext(sys.stdout)
     else:
-        # Add the line we just obtained back to the iterator
-        iterator = itertools.chain([header], lines)
-        line_delta = 1
+        context = open(destination, "w")
 
-    for lineno_minus_delta, line in enumerate(iterator):
-        line = line.rstrip()
-        lineno = lineno_minus_delta + line_delta
-        newlineno = lineno
-        # If we see an empty line, we check the rest of the file has empty lines. If so, return,
-        # if not, throw an error since the file is malformatted. This is to handle trailing newlines
-        # which editors sometimes add.
-        if not line:
-            for line in lines:
-                newlineno += 1
-                if line.rstrip():
-                    raise ValueError(
-                        f"Found empty line on line {lineno}, then nonempty on line {newlineno}"
-                    )
-            return clean_result(clade_to_lineage, start_time)
+    with context as output:
+        print("contigs\tpredictions", file=output)
+        for annotation in annotations:
+            # If annotation is empty, we use the unassigned clade name
+            if not annotation.clades:
+                print(f"{annotation.contig_name}\t{unassigned_clade_name}", file=output)
+            else:
+                print(annotation.to_string(), file=output)
+    logger.info("\tDone writing output")
 
-        (clade_proportion, clade_conut, taxon_count, rank, tax_id_str, clade) = (
-            line.split("\t")
-        )
-        rank_index = METABULI_CANONICAL_RANKS.get(rank)
 
-        if rank_index is None:
-            raise ValueError(f'Unknown rank: "{rank}"')
+def write_ncbi_output(
+    destination: Optional[Path],
+    annotations: list[taxconverter.common.NCBIAnnotation],
+    ncbi: taxconverter.common.NCBIRanks,
+    unassigned_clade_name: str,
+):
+    dst_str = "stdout" if destination is None else destination
+    logger.info(f"Writing output to {dst_str}")
+    # Allow using a with-statement to safely close the file, but when
+    # destination is None, do not close.
+    if destination is None:
+        context = nullcontext(sys.stdout)
+    else:
+        context = open(destination, "w")
 
-        # Each successive rank has two more leading spaces in clade name.
-        if not (
-            len(clade) > 2 * rank_index
-            # If rank_index is zero, then there are no leading spaces, so the isspace check fails
-            and (rank_index == 0 or clade[: 2 * rank_index].isspace())
-            and not clade[2 * rank_index].isspace()
-        ):
-            raise ValueError(
-                f"On line {lineno}, leading spaces in clade name does not match rank"
-            )
+    names: list[str] = []
+    with context as output:
+        print("contigs\tpredictions", file=output)
+        for annotation in annotations:
+            print(annotation.contig_name, end="\t", file=output)
+            # If annotation is empty, we use the unassigned clade name
+            if not annotation.clades:
+                print(unassigned_clade_name, file=output)
+            else:
+                names.clear()
+                for i in annotation.clades:
+                    names.append(ncbi.child_data[i][2].content)
+                print(*names, sep=";", file=output)
+    logger.info("\tDone writing output")
 
-        stripped_clade = clade[2 * rank_index :]
-        del clade  # avoid accidentally referring to unstripped clades after this point
 
-        if stripped_clade in clade_to_lineage:
-            raise ValueError(f'Duplicate clade seen: "{stripped_clade}"')
+def add_output(subparser: argparse.ArgumentParser):
+    subparser.add_argument(
+        "-o",
+        "--output",
+        dest="output",
+        metavar="",
+        type=Path,
+        help="path to TSV output file [stdout]",
+    )
 
-        if ";" in stripped_clade:
-            raise ValueError(
-                f'Semicolon cannot appear in clade name "{stripped_clade}"'
-            )
+    subparser.add_argument(
+        "--unassigned",
+        dest="unassigned",
+        metavar="",
+        type=str,
+        default="unknown",
+        help="Clade name for unassigned contigs ['unknown']",
+    )
 
-        # Parse numeric fields - we do this for safety, to make it more likely that if the
-        # order of the (unlabelled) columns switch, as they seem to have done in
-        # earlier versions of Metabuli, an error is thrown
-        check_float(lineno, clade_proportion)
-        check_int(lineno, clade_conut)
-        check_int(lineno, taxon_count)
-        clade_id = check_int(lineno, tax_id_str)
-
-        # Check that the rows are in correct order. This algorithm used by this parser
-        # relies on the rows being well-ordered such that children of a clade directly
-        # follows their parent or siblings. Any missing line will mess that up.
-        # So, we add a check here.
-        if (
-            rank_index <= last_rank_index
-            or rank_index == last_rank_index + 1
-            # Special case if the non-canonical "root" is ever dropped from format
-            or (rank_index == 1 and last_rank_index == -1)
-        ):
-            ranks[rank_index] = stripped_clade
-            clade_to_lineage[clade_id] = ranks[: rank_index + 1]
-        else:
-            raise ValueError(
-                f"On line {lineno}, clade {stripped_clade} skips one or more ranks, or the rows are out of order"
-            )
-
-        last_rank_index = rank_index
-
-    return clean_result(clade_to_lineage, start_time)
 
 def main():
-
-    def convert_to_unified(is_mmseqs):
-        def decorator(func):
-            def wrapper(*arguments, **kwargs):
-                df = func(*arguments, **kwargs)
-                if is_mmseqs:
-                    df_result = all_to_mmseqs(df)
-                    df_result.to_csv(args.output, header=None, sep='\t', index=None)
-                else:
-                    df_result = all_to_taxvamb(df)
-                    df_result.to_csv(args.output, sep='\t', index=None)
-            return wrapper
-        return decorator
-
-    doc = f"""
-    Version: {'.'.join([str(i) for i in taxconverter.__version__])}
-
-    Convert outputs of Metabuli, Centrifuge and Kraken2 to the unified format. The format is "contigs\tpredictions" and is accepted by TaxVAMB tool.
-    Important: for the older release of Taxometer that uses MMSeqs2-like files, use the --mmseqs-format flag.
-    As a result, an explicit full lineage is avaliable with each sequence id, using GTDB identifiers for Metabuli and MMSeqs2, NCBI identifiers for Centrifuge and Kraken2."""
     parser = argparse.ArgumentParser(
         prog="taxconverter",
-        description=doc,
+        description=CLI_DOCUMENTATION,
         formatter_class=argparse.RawDescriptionHelpFormatter,
         add_help=False,
     )
@@ -281,162 +141,184 @@ def main():
     helpos.add_argument(
         "--version",
         action="version",
-        version=f'Taxconverter {".".join(map(str, taxconverter.__version__))}',
+        version=f"Taxconverter {'.'.join(map(str, taxconverter.__version__))}",
     )
 
     subparsers = parser.add_subparsers(dest="subcommand")
     metabuli = subparsers.add_parser(
         COMMAND_METABULI,
         help="""
-        Metabuli format converter
+        Convert from Metabuli classification file
         """,
     )
-    add_metabuli_arguments(metabuli)
+    metabuli.add_argument(
+        "--classifications",
+        dest="classifications",
+        metavar="",
+        required=True,
+        type=Path,
+        help="path to Metabuli *_classifications.tsv (required)",
+    )
+    metabuli.add_argument(
+        "--report",
+        dest="report",
+        metavar="",
+        required=True,
+        type=Path,
+        help="path to Metabuli *_report.tsv (required)",
+    )
+    add_output(metabuli)
 
     kraken = subparsers.add_parser(
         COMMAND_KRAKEN,
         help="""
-        Kraken2 format converter
+        Convert from Kraken2 format
         """,
     )
-    add_one_filepath_arguments(kraken)
+    kraken.add_argument(
+        "-i",
+        "--input",
+        dest="input",
+        metavar="",
+        required=True,
+        type=Path,
+        help="path to Kraken TSV file (required)",
+    )
+    add_output(kraken)
 
     centrifuge = subparsers.add_parser(
         COMMAND_CENTRIFUGE,
         help="""
-        Centrifuge format converter
+        Convert from Centrifuge output
         """,
     )
-    add_one_filepath_arguments(centrifuge)
+    centrifuge.add_argument(
+        "-i",
+        "--input",
+        dest="input",
+        metavar="",
+        required=True,
+        type=Path,
+        help="path to classification file (required)",
+    )
+    add_output(centrifuge)
 
     metamaps = subparsers.add_parser(
         COMMAND_METAMAPS,
         help="""
-        MetaMaps format converter
+        Convert from Metamaps Krona format
         """,
     )
-    add_one_filepath_arguments(metamaps)
+    metamaps.add_argument(
+        "-i",
+        "--input",
+        dest="input",
+        metavar="",
+        required=True,
+        type=Path,
+        help="path to Metamaps Krona file (required)",
+    )
+    add_output(metamaps)
 
     mmseqs = subparsers.add_parser(
         COMMAND_MMSEQS,
         help="""
-        MMSeqs2 format converter
+        Convert from MMseqs2 TSV with semicolon-sep lineage
         """,
     )
-    add_one_filepath_arguments(mmseqs)
+    mmseqs.add_argument(
+        "-i",
+        "--input",
+        dest="input",
+        metavar="",
+        required=True,
+        type=Path,
+        help="path to MMseqs2 TSV with semicolon-sep lineage (required)",
+    )
+    add_output(mmseqs)
 
     args = parser.parse_args()
 
-    @convert_to_unified(args.mmseqs)
-    def centrifuge_data(filepath: str):
-        map_ncbi = ncbi_lineage()
-        begintime = time.time()
-        df_centrifuge = pd.read_csv(filepath, delimiter='\t', usecols=['readID', 'taxID'])
-        df_centrifuge['taxID'] = df_centrifuge['taxID'].astype(str)
-        df_centrifuge[LINEAGE_COL] = df_centrifuge['taxID'].map(lambda x: get_lineage(x, map_ncbi))
-        df_centrifuge[SEQ_COL] = df_centrifuge['readID']
-        elapsed = round(time.time() - begintime, 2)
-        logger.info(f"Converted Centrifuge to TaxVAMB/Taxometer format in {elapsed} seconds")
-        return df_centrifuge
+    if args.output is not None:
+        if args.output.exists():
+            raise FileExistsError(args.output)
 
-
-    @convert_to_unified(args.mmseqs)
-    def metabuli_data(
-            filepath_clas: Path,
-            filepath_report: Path,
-    ):
-        map_lineage = metabuli_lineage(filepath_report)
-
-        begintime = time.time()
-
-        # Check if there is a header in the classification file.
-        with open(filepath_clas) as file:
-            clas_header = next(file, None)
-
-        if clas_header is not None:
-            if clas_header.startswith("#is_classified\tname\ttaxID\t"):
-                pd_class_header = 0
-            else:
-                pd_class_header = None
-        else:
-            return pd.DataFrame()
-
-        df_clas = pd.read_csv(
-            filepath_clas,
-            delimiter="\t",
-            header=pd_class_header,
-            dtype={0: int, 1: str, 2: int, 3: int, 4: float, 5: str, 6: str},
-            names = list(range(7)),
-        )
-
-        tax_ids = df_clas[2]
-
-        # Verify all tax ids are present in lineage file - otherwise failures will result in
-        # silently returning zero annotations
-        missing_id = next(filter(lambda x: x not in map_lineage, tax_ids), None)
-        if missing_id is not None:
+        if not args.output.parent.is_dir():
             raise ValueError(
-                f"Tax ID {missing_id} from classifier file missing from lineage file"
+                f"Parent of output {args.output} is not an existing directory"
             )
 
-        df_clas[LINEAGE_COL] = tax_ids.map(map_lineage)
-        df_clas[LINEAGE_COL] = df_clas[LINEAGE_COL].replace("unclassified", "")
-        df_clas[LINEAGE_COL] = df_clas[LINEAGE_COL].str.replace('root;', '', regex=False)
-        df_clas[LINEAGE_COL] = df_clas[LINEAGE_COL].str.replace('root', '', regex=False)
-        df_clas[SEQ_COL] = df_clas[1]
-        df_clas_tax = df_clas[[SEQ_COL, LINEAGE_COL]]
-        elapsed = round(time.time() - begintime, 2)
-        logger.info(f"Converted Metabuli to TaxVAMB/Taxometer format in {elapsed} seconds")
-        return df_clas_tax
-
-
-    @convert_to_unified(args.mmseqs)
-    def metamaps_data(filepath: str):
-        df_ncbi = ncbi_lineage()
-        begintime = time.time()
-        df_metamaps = pd.read_csv(filepath, header=None, usecols=[0,1], delimiter='\t')
-        df_metamaps.columns = ['readID', 'taxID']
-        df_metamaps['taxID'] = df_metamaps['taxID'].astype(str)
-        df_metamaps = pd.merge(df_metamaps, df_ncbi, left_on='taxID', right_on='tax_id', how='left')
-        df_metamaps[SEQ_COL] = df_metamaps['readID']
-        elapsed = round(time.time() - begintime, 2)
-        logger.info(f"Converted MetaMaps to TaxVAMB/Taxometer format in {elapsed} seconds")
-        return df_metamaps
-
-
-    @convert_to_unified(args.mmseqs)
-    def mmseqs_data(filepath: str):
-        begintime = time.time()
-        df_mmseqs = pd.read_csv(filepath, header=None, delimiter='\t')
-        df_mmseqs[SEQ_COL] = df_mmseqs[0]
-        df_mmseqs[LINEAGE_COL] = df_mmseqs[8]
-        elapsed = round(time.time() - begintime, 2)
-        logger.info(f"Converted MMseqs2 to TaxVAMB/Taxometer format in {elapsed} seconds")
-        return df_mmseqs
-    
-
-    @convert_to_unified(args.mmseqs)
-    def kraken_data(filepath: str):
-        map_ncbi = ncbi_lineage()
-        begintime = time.time()
-        df_kraken = pd.read_csv(filepath, header=None, usecols=[1,2], delimiter='\t')
-        df_kraken.columns = ['readID', 'taxID']
-        df_kraken['taxID'] = df_kraken['taxID'].astype(str)
-        df_kraken[SEQ_COL] = df_kraken['readID']
-        df_kraken[LINEAGE_COL] = df_kraken['taxID'].map(lambda x: get_lineage(x, map_ncbi))
-        elapsed = round(time.time() - begintime, 2)
-        logger.info(f"Converted Kraken2 to TaxVAMB/Taxometer format in {elapsed} seconds")
-        return df_kraken
-
     if args.subcommand == COMMAND_CENTRIFUGE:
-        centrifuge_data(args.input)
+        if not args.input.is_file():
+            raise FileNotFoundError(f"Centrifuge input file at {args.input}")
+
+        ncbi = load_ncbi()
+
+        logger.info("Loading Centrifuge input")
+        logger.info(f"\tPath: {args.input}")
+        with open(args.input) as file:
+            annotations = taxconverter.centrifuge.parse_centrifuge(
+                args.input, file, ncbi
+            )
+        logger.info("\tDone parsing Centrifuge input")
+
+        write_ncbi_output(args.output, annotations, ncbi, args.unassigned)
+
     elif args.subcommand == COMMAND_KRAKEN:
-        kraken_data(args.input)
+        if not args.input.is_file():
+            raise FileNotFoundError(f"Kraken input file at {args.input}")
+
+        ncbi = load_ncbi()
+
+        logger.info("Loading Kraken input")
+        logger.info(f"\tPath: {args.input}")
+        with open(args.input) as file:
+            annotations = taxconverter.kraken.parse_kraken(args.input, file, ncbi)
+        logger.info("\tDone parsing Kraken input")
+
+        write_ncbi_output(args.output, annotations, ncbi, args.unassigned)
     elif args.subcommand == COMMAND_METABULI:
-        metabuli_data(args.clas, args.report)
+        if not args.classifications.is_file():
+            raise FileNotFoundError(
+                f"Metabuli classifications file at {args.classifications}"
+            )
+
+        if not args.report.is_file():
+            raise FileNotFoundError(f"Metabuli report file at {args.report}")
+
+        logger.info("Loading Metabuli input")
+        logger.info(f"\tClassification paths: {args.classifications}")
+        logger.info(f"\tReport paths: {args.report}")
+        annotations = taxconverter.metabuli.parse_metabuli_files(
+            args.classifications, args.report
+        )
+        logger.info("\tDone parsing Metabuli input")
+        write_generic_output(args.output, annotations, args.unassigned)
     elif args.subcommand == COMMAND_METAMAPS:
-        metamaps_data(args.input)
+        if not args.input.is_file():
+            raise FileNotFoundError(f"Metamaps Krona input file at {args.input}")
+
+        ncbi = load_ncbi()
+
+        logger.info("Loading Metamaps Krona input")
+        logger.info(f"\tPath: {args.input}")
+        with open(args.input) as file:
+            annotations = taxconverter.metamaps.parse_metamaps_krona(
+                args.input, file, ncbi
+            )
+        logger.info("\tDone parsing Kraken input")
+
+        write_ncbi_output(args.output, annotations, ncbi, args.unassigned)
+
     elif args.subcommand == COMMAND_MMSEQS:
-        mmseqs_data(args.input)
+        if not args.input.is_file():
+            raise FileNotFoundError(f"MMseqs taxonomy TSV file at {args.input}")
+
+        logger.info("MMseqs taxonomy TSV file")
+        logger.info(f"\tPath: {args.input}")
+        annotations = taxconverter.mmseqs.parse_mmseqs_tsv(args.input)
+        logger.info("\tDone parsing MMseqs input")
+        write_generic_output(args.output, annotations, args.unassigned)
+
     else:
         assert False

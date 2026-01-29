@@ -3,7 +3,8 @@ from typing import Optional, NewType, Self, Iterator
 from pathlib import Path
 import gzip
 
-CANONICAL_RANK_NAMES = {
+# The seven canonical ranks
+CANONICAL_RANK_NAMES = [
     "domain",
     "phylum",
     "class",
@@ -11,11 +12,11 @@ CANONICAL_RANK_NAMES = {
     "family",
     "genus",
     "species",
-}
+]
 
 NCBI_HEADER = "child_id\tchild_rank\tparent_id\tname"
 
-# 0-6 are the indices of TAXA_LEVELS
+# 0-6 are the indices of CANONICAL_RANK_NAMES
 Rank = NewType("Rank", int)
 
 RANK_FROM_STRING = {
@@ -42,31 +43,55 @@ class NCBIIdentifier:
             return None
         return cls(field)
 
+    @classmethod
+    def sentinel(cls):
+        return cls("")
+
 
 @dataclasses.dataclass(frozen=True, slots=True)
 class UnvalidatedIntAnnotation:
     contig_name: str
+    # None if contig is not annotated
     leaf_clade: Optional[int]
 
 
 @dataclasses.dataclass(frozen=True, slots=True)
 class NCBIAnnotation:
     contig_name: str
-    # The clade names, in order.
-    # By default, these are assumed to represent: TAXA_LEVELS
+    # The clade identifiers, in order.
     # This may be truncated, e.g. of length 2 if only domain and phylum is known
+    # If empty, the contig is not annotated
     clades: list[NCBIID]
 
     @classmethod
     def new_unknown(cls: type[Self], contig_name: str) -> Self:
         return cls(contig_name, [])
 
+# Same as NCBIAnnotation, but instead of storing an NCBIID, stores
+# a name directly.
+# Use an NCBIRanks to convert a NCBIAnnotation to this
+@dataclasses.dataclass(frozen=True, slots=True)
+class GenericAnnotation:
+    contig_name: str
+    clades: list[NCBIIdentifier]
 
+    @classmethod
+    def new_unknown(cls: type[Self], contig_name: str) -> Self:
+        return cls(contig_name, [])
+
+    def to_string(self) -> str:
+        lineage = ";".join([i.content for i in self.clades])
+        return f"{self.contig_name}\t{lineage}"
+
+
+# This class represents a mapping from NCBIID to the name and rank of that ID,
+# as well as the ID of the parent.
+# With this mapping and a single NCBIID, one can get the full lineage of ancestors
 class NCBIRanks:
     # {child_id, (parent_id, child_rank, child_name)}
     # child rank is None if the rank is not canonical, e.g. Infraorder.
-    __slots__ = ["child_to_parent"]
-    child_to_parent: dict[NCBIID, tuple[NCBIID, Optional[Rank], NCBIIdentifier]]
+    __slots__ = ["child_data"]
+    child_data: dict[NCBIID, tuple[NCBIID, Optional[Rank], NCBIIdentifier]]
 
     def annotation_from_int(
         self, int_annotation: UnvalidatedIntAnnotation
@@ -76,7 +101,7 @@ class NCBIRanks:
             # Universal ancestor has identifier 1, and no parent, so is not in the parent dict
             return NCBIAnnotation.new_unknown(int_annotation.contig_name)
 
-        value = self.child_to_parent.get(NCBIID(integer), None)
+        value = self.child_data.get(NCBIID(integer), None)
         if value is None:
             raise ValueError(
                 f"Contig {repr(int_annotation.contig_name)} was annotated with NCBI ID {integer}, "
@@ -88,7 +113,7 @@ class NCBIRanks:
         # an intermediate rank is always canonical
         if child_rank is None:
             child_id = parent_id
-            (parent_id, child_rank, _) = self.child_to_parent[child_id]
+            (parent_id, child_rank, _) = self.child_data[child_id]
             # This property was validated in the construction of NCBIRanks
             assert child_rank is not None
         else:
@@ -99,8 +124,8 @@ class NCBIRanks:
         # This is the number of steps to take until child is SUPERKINGDOM
         for _ in range(int(child_rank)):
             child_id = parent_id
-            (parent_id, child_rank, _) = self.child_to_parent[child_id]
-            clades.append(parent_id)
+            (parent_id, child_rank, _) = self.child_data[child_id]
+            clades.append(child_id)
 
         clades.reverse()
 
@@ -142,6 +167,7 @@ class NCBIRanks:
                 )
 
             (child_id_str, child_rank_str, parent_id_str, name) = fields
+            name = name.rstrip()
             ncbi_id = NCBIIdentifier.try_from_field(name)
             if ncbi_id is None:
                 raise ValueError(
@@ -171,5 +197,12 @@ class NCBIRanks:
                     )
 
         instance = super().__new__(cls)
-        instance.child_to_parent = map
+        instance.child_data = map
         return instance
+
+    def generic_annotation(self, ncbi_annotation: NCBIAnnotation) -> GenericAnnotation:
+        names: list[NCBIIdentifier] = []
+        for ncbi_id in ncbi_annotation.clades:
+            names.append(self.child_data[ncbi_id][2])
+
+        return GenericAnnotation(ncbi_annotation.contig_name, names)
