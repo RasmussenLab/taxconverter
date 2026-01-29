@@ -1,0 +1,26 @@
+S14C105738	60	genus	Campylobacter D	3	3	3	1.000	d_Bacteria;p_Campylobacterota;c_Campylobacteria;o_Campylobacterales;f_Campylobacteraceae;g_Campylobacter D
+S14C139854	0	no rank	unclassified	1	0	0	0.000	
+S16C27207	43	genus	Clostridioides	2	2	2	1.000	d_Bacteria;p_Firmicutes A;c_Clostridia;o_Peptostreptococcales;f_Peptostreptococcaceae;g_Clostridioides
+S14C105980	60	genus	Campylobacter D	4	4	4	1.000	d_Bacteria;p_Campylobacterota;c_Campylobacteria;o_Campylobacterales;f_Campylobacteraceae;g_Campylobacter D
+S14C106228	48	genus	Neisseria	16	15	12	0.970	d_Bacteria;p_Proteobacteria;c_Gammaproteobacteria;o_Burkholderiales;f_Neisseriaceae;g_Neisseria
+S18C69297	0	no rank	unclassified	1	0	0	0.000	
+S7C344116	0	no rank	unclassified	2	0	0	0.000	
+S14C106482	212	species	Mannheimia haemolytica	15	14	8	0.640	d_Bacteria;p_Proteobacteria;c_Gammaproteobacteria;o_Enterobacterales;f_Pasteurellaceae;g_Mannheimia;s_Mannheimia haemolytica
+S14C106716	48	genus	Neisseria	3	3	3	1.000	d_Bacteria;p_Proteobacteria;c_Gammaproteobacteria;o_Burkholderiales;f_Neisseriaceae;g_Neisseria
+S14C106942	326	species	Elizabethkingia anophelis	15	14	2	0.590	d_Bacteria;p_Bacteroidota;c_Bacteroidia;o_Flavobacteriales;f_Weeksellaceae;g_Elizabethkingia;s_Elizabethkingia anophelis
+S14C107131	7986	species	Centipeda felix	2	2	2	1.000	d_Bacteria;p_Firmicutes C;c_Negativicutes;o_Selenomonadales;f_Selenomonadaceae;g_Centipeda;s_Centipeda felix
+S14C107287	16556	species	Prevotella fusca	3	3	3	1.000	d_Bacteria;p_Bacteroidota;c_Bacteroidia;o_Bacteroidales;f_Bacteroidaceae;g_Prevotella;s_Prevotella fusca
+S15C172097	0	no rank	unclassified	1	0	0	0.000	
+S14C107482	325	genus	Elizabethkingia	1	1	1	1.000	d_Bacteria;p_Bacteroidota;c_Bacteroidia;o_Flavobacteriales;f_Weeksellaceae;g_Elizabethkingia
+S14C107755	48	genus	Neisseria	6	5	5	1.000	d_Bacteria;p_Proteobacteria;c_Gammaproteobacteria;o_Burkholderiales;f_Neisseriaceae;g_Neisseria
+S16C21221	3382	species	Flavobacterium columnare	12	11	2	0.600	d_Bacteria;p_Bacteroidota;c_Bacteroidia;o_Flavobacteriales;f_Flavobacteriaceae;g_Flavobacterium;s_Flavobacterium columnare
+S16C22432	334	species	Streptococcus iniae	3	3	3	1.000	d_Bacteria;p_Firmicutes;c_Bacilli;o_Lactobacillales;f_Streptococcaceae;g_Streptococcus;s_Streptococcus iniae
+S16C23435	60	genus	Campylobacter D	4	4	4	1.000	d_Bacteria;p_Campylobacterota;c_Campylobacteria;o_Campylobacterales;f_Campylobacteraceae;g_Campylobacter D
+S16C24606	19289	species	Flavobacterium psychrophilum A	9	8	3	0.570	d_Bacteria;p_Bacteroidota;c_Bacteroidia;o_Flavobacteriales;f_Flavobacteriaceae;g_Flavobacterium;s_Flavobacterium psychrophilum A
+S19C662838	0	no rank	unclassified	1	0	0	0.000	
+S16C26143	21142	species	Campylobacter D novaezeelandiae	29	29	20	0.720	d_Bacteria;p_Campylobacterota;c_Campylobacteria;o_Campylobacterales;f_Campylobacteraceae;g_Campylobacter D;s_Campylobacter D novaezeelandiae
+S16C28655	44	species	Clostridioides difficile	2	2	2	1.000	d_Bacteria;p_Firmicutes A;c_Clostridia;o_Peptostreptococcales;f_Peptostreptococcaceae;g_Clostridioides;s_Clostridioides difficile
+S16C29802	1850	species	Campylobacter A curvus	2	2	1	0.500	d_Bacteria;p_Campylobacterota;c_Campylobacteria;o_Campylobacterales;f_Campylobacteraceae;g_Campylobacter A;s_Campylobacter A curvus
+S16C30912	63	genus	Burkholderia	6	6	5	0.800	d_Bacteria;p_Proteobacteria;c_Gammaproteobacteria;o_Burkholderiales;f_Burkholderiaceae;g_Burkholderia
+S16C32239	1850	species	Campylobacter A curvus	6	6	5	0.830	d_Bacteria;p_Campylobacterota;c_Campylobacteria;o_Campylobacterales;f_Campylobacteraceae;g_Campylobacter A;s_Campylobacter A curvus
+S18C41978	0	no rank	unclassified	2	0	0	0.000	

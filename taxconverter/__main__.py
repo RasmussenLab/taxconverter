@@ -1,8 +1,14 @@
 from loguru import logger
 import taxconverter
+from taxconverter.common import (
+    GenericAnnotation,
+    NCBIAnnotation,
+    NCBIRanks,
+    NCBIIdentifier,
+)
 from pathlib import Path
 import argparse
-from typing import Optional
+from typing import Optional, TextIO
 from contextlib import nullcontext
 import sys
 
@@ -24,6 +30,7 @@ Convert outputs of Metabuli, Centrifuge and Kraken2 to the unified format. The f
 Important: for the older release of Taxometer that uses MMSeqs2-like files, use the --mmseqs-format flag.
 As a result, an explicit full lineage is avaliable with each sequence id, using GTDB identifiers for Metabuli and MMSeqs2, NCBI identifiers for Centrifuge and Kraken2."""
 
+
 def format_log(record) -> str:
     colors = {"WARNING": "red", "INFO": "green", "DEBUG": "blue", "ERROR": "red"}
     L = colors.get(record["level"].name, "blue")
@@ -38,25 +45,45 @@ def format_log(record) -> str:
 logger.remove()
 logger.add(sys.stderr, format=format_log)
 
+
 def load_ncbi() -> taxconverter.common.NCBIRanks:
-    if not NCBI_LINEAGE_PATH.is_file():
+    # Allow users to load from either compressed or noncompressed (latter for speed)
+    noncompressed = NCBI_LINEAGE_PATH.with_suffix("")
+    if noncompressed.is_file():
+        path = noncompressed
+    elif NCBI_LINEAGE_PATH.is_file():
+        path = NCBI_LINEAGE_PATH
+    else:
         raise FileNotFoundError(
-            f"Could not find Taxconverter lineage path at {NCBI_LINEAGE_PATH}.\n"
+            f"Could not find Taxconverter lineage path at {str(noncompressed)}, "
+            "with or without a '.gz' suffix.\n"
             "This file ought to come automatically with the Taxconverter installation,"
             "and is needed to extract full lineages from NCBI identifiers.\n"
             "Please manually download the file at github.com/RasmussenLab/taxconverter "
             "under 'Releases', and place it in the path as given above."
         )
+
     logger.info("Loading NCBI lineages.")
-    ncbi = taxconverter.common.NCBIRanks.from_file(NCBI_LINEAGE_PATH)
+
+    ncbi = taxconverter.common.NCBIRanks.from_file(path)
     logger.info("\tDone loading NCBI lineages")
     return ncbi
 
 
-def write_generic_output(
+def convert_ncbi_annotations(
+    ncbi: NCBIRanks, annotations: list[NCBIAnnotation]
+) -> list[GenericAnnotation]:
+    result: list[GenericAnnotation] = []
+    for annotation in annotations:
+        result.append(ncbi.generic_annotation(annotation))
+    return result
+
+
+def write_output(
     destination: Optional[Path],
-    annotations: list[taxconverter.common.GenericAnnotation],
-    unassigned_clade_name: str,
+    annotations: list[GenericAnnotation],
+    unassigned_clade_name: NCBIIdentifier,
+    is_mmseqs: bool,
 ):
     dst_str = "stdout" if destination is None else destination
     logger.info(f"Writing output to {dst_str}")
@@ -68,45 +95,49 @@ def write_generic_output(
         context = open(destination, "w")
 
     with context as output:
-        print("contigs\tpredictions", file=output)
-        for annotation in annotations:
-            # If annotation is empty, we use the unassigned clade name
-            if not annotation.clades:
-                print(f"{annotation.contig_name}\t{unassigned_clade_name}", file=output)
-            else:
-                print(annotation.to_string(), file=output)
+        if is_mmseqs:
+            write_mmseqs_output(output, annotations, unassigned_clade_name)
+        else:
+            write_vamb_output(output, annotations, unassigned_clade_name)
+
     logger.info("\tDone writing output")
 
 
-def write_ncbi_output(
-    destination: Optional[Path],
-    annotations: list[taxconverter.common.NCBIAnnotation],
-    ncbi: taxconverter.common.NCBIRanks,
-    unassigned_clade_name: str,
+# MMseqs output is 9 columns:
+# Name, zeros, rank, last, zeros, zeros, zeros, zeros, lineage
+def write_mmseqs_output(
+    output: TextIO,
+    annotations: list[GenericAnnotation],
+    unassigned_clade_name: NCBIIdentifier,
 ):
-    dst_str = "stdout" if destination is None else destination
-    logger.info(f"Writing output to {dst_str}")
-    # Allow using a with-statement to safely close the file, but when
-    # destination is None, do not close.
-    if destination is None:
-        context = nullcontext(sys.stdout)
-    else:
-        context = open(destination, "w")
+    unassigned_list = [unassigned_clade_name.content]
+    for annotation in annotations:
+        clades = annotation.clades
+        clades = (
+            [i.content for i in annotation.clades]
+            if annotation.clades
+            else unassigned_list
+        )
+        lineage = ";".join(clades)
+        rank = annotation.get_mmseqs_rank()
+        print(
+            f"{annotation.contig_name}\t0\t{rank}\t{clades[-1]}\t0\t0\t0\t0\t{lineage}",
+            file=output,
+        )
 
-    names: list[str] = []
-    with context as output:
-        print("contigs\tpredictions", file=output)
-        for annotation in annotations:
-            print(annotation.contig_name, end="\t", file=output)
-            # If annotation is empty, we use the unassigned clade name
-            if not annotation.clades:
-                print(unassigned_clade_name, file=output)
-            else:
-                names.clear()
-                for i in annotation.clades:
-                    names.append(ncbi.child_data[i][2].content)
-                print(*names, sep=";", file=output)
-    logger.info("\tDone writing output")
+
+def write_vamb_output(
+    output: TextIO,
+    annotations: list[GenericAnnotation],
+    unassigned_clade_name: NCBIIdentifier,
+):
+    print("contigs\tpredictions", file=output)
+    for annotation in annotations:
+        # If annotation is empty, we use the unassigned clade name
+        if not annotation.clades:
+            print(f"{annotation.contig_name}\t{unassigned_clade_name.content}", file=output)
+        else:
+            print(annotation.to_string(), file=output)
 
 
 def add_output(subparser: argparse.ArgumentParser):
@@ -126,6 +157,14 @@ def add_output(subparser: argparse.ArgumentParser):
         type=str,
         default="unknown",
         help="Clade name for unassigned contigs ['unknown']",
+    )
+
+    subparser.add_argument(
+        "-m",
+        "--mmseqs-format",
+        dest="output_mmseqs",
+        action="store_true",
+        help="output in MMSeqs2-like format",
     )
 
 
@@ -152,7 +191,8 @@ def main():
         """,
     )
     metabuli.add_argument(
-        "--classifications",
+        "-c",
+        "--input-clas",
         dest="classifications",
         metavar="",
         required=True,
@@ -160,7 +200,8 @@ def main():
         help="path to Metabuli *_classifications.tsv (required)",
     )
     metabuli.add_argument(
-        "--report",
+        "-r",
+        "--input-report",
         dest="report",
         metavar="",
         required=True,
@@ -239,6 +280,13 @@ def main():
 
     args = parser.parse_args()
 
+    for char in "\t;\r\n":
+        if char in args.unassigned:
+            raise ValueError(
+                "Argument --unassigned must not contain semicolon, newlines, \\r or tab."
+            )
+    unassigned = NCBIIdentifier(args.unassigned)
+
     if args.output is not None:
         if args.output.exists():
             raise FileExistsError(args.output)
@@ -261,8 +309,8 @@ def main():
                 args.input, file, ncbi
             )
         logger.info("\tDone parsing Centrifuge input")
-
-        write_ncbi_output(args.output, annotations, ncbi, args.unassigned)
+        generic = convert_ncbi_annotations(ncbi, annotations)
+        write_output(args.output, generic, unassigned, args.output_mmseqs)
 
     elif args.subcommand == COMMAND_KRAKEN:
         if not args.input.is_file():
@@ -275,8 +323,9 @@ def main():
         with open(args.input) as file:
             annotations = taxconverter.kraken.parse_kraken(args.input, file, ncbi)
         logger.info("\tDone parsing Kraken input")
+        generic = convert_ncbi_annotations(ncbi, annotations)
+        write_output(args.output, generic, unassigned, args.output_mmseqs)
 
-        write_ncbi_output(args.output, annotations, ncbi, args.unassigned)
     elif args.subcommand == COMMAND_METABULI:
         if not args.classifications.is_file():
             raise FileNotFoundError(
@@ -293,7 +342,8 @@ def main():
             args.classifications, args.report
         )
         logger.info("\tDone parsing Metabuli input")
-        write_generic_output(args.output, annotations, args.unassigned)
+
+        write_output(args.output, annotations, unassigned, args.output_mmseqs)
     elif args.subcommand == COMMAND_METAMAPS:
         if not args.input.is_file():
             raise FileNotFoundError(f"Metamaps Krona input file at {args.input}")
@@ -306,9 +356,10 @@ def main():
             annotations = taxconverter.metamaps.parse_metamaps_krona(
                 args.input, file, ncbi
             )
-        logger.info("\tDone parsing Kraken input")
+        logger.info("\tDone parsing Metamaps input")
 
-        write_ncbi_output(args.output, annotations, ncbi, args.unassigned)
+        generic = convert_ncbi_annotations(ncbi, annotations)
+        write_output(args.output, generic, unassigned, args.output_mmseqs)
 
     elif args.subcommand == COMMAND_MMSEQS:
         if not args.input.is_file():
@@ -318,7 +369,7 @@ def main():
         logger.info(f"\tPath: {args.input}")
         annotations = taxconverter.mmseqs.parse_mmseqs_tsv(args.input)
         logger.info("\tDone parsing MMseqs input")
-        write_generic_output(args.output, annotations, args.unassigned)
+        write_output(args.output, annotations, unassigned, args.output_mmseqs)
 
     else:
         assert False

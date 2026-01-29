@@ -78,25 +78,33 @@ def parse_metabuli_classifications(
     # Start from 2 since we skipped the header
     for line_number, line in enumerate(rest_lines, line_start):
         fields = line.split("\t")
+        if fields[0] == "0":
+            if len(fields) != 6:
+                raise ValueError(
+                    err_prefix + f"on line {line_number}, for unclassified sequence, "
+                    "expected 7 tab-separated fields, "
+                    f"but got {len(fields)}."
+                )
+            result.append(UnvalidatedIntAnnotation(fields[1], None))
+            continue
+        elif fields[0] != "1":
+            raise ValueError(
+                err_prefix + f"on line {line_number}, "
+                "expected first column to contain '0' or '1'"
+            )
+
         if len(fields) != 7:
             raise ValueError(
                 err_prefix + f"on line {line_number}, expected 7 tab-separated fields, "
                 f"but got {len(fields)}."
             )
 
-        is_classified = fields[0]
         identifier = fields[1]
         tax_id_str = fields[2]
 
-        if is_classified == "0" or tax_id_str == "0":
+        if tax_id_str == "0":
             result.append(UnvalidatedIntAnnotation(identifier, None))
             continue
-        elif is_classified != "1":
-            raise ValueError(
-                err_prefix + f"on line {line_number}, "
-                "expected first column to contain '0' or '1'"
-            )
-
         try:
             taxid = int(tax_id_str)
         except ValueError:
@@ -174,7 +182,7 @@ def parse_metabuli_report(
                 if line.rstrip():
                     raise ValueError(
                         f"In Metabuli report at {path}, found empty line on line {line_number}, "
-                        "then nonempty on line {seek_line_number}"
+                        f"then nonempty on line {seek_line_number}"
                     )
 
             delete_universal_root(clade_to_lineage)

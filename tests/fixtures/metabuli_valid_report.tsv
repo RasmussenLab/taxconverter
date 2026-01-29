@@ -1,0 +1,697 @@
+100.0000	201563	0	no rank	1	root
+100.0000	201563	221	superkingdom	14524	  d__Bacteria
+31.9642	64428	0	phylum	63357	    p__Bacillota
+31.9642	64428	25	class	63358	      c__Bacilli
+31.1248	62736	28	order	92156	        o__Lactobacillales
+29.4032	59266	12	family	92157	          f__Streptococcaceae
+26.7628	53944	5173	genus	92158	            g__Streptococcus
+4.5961	9264	8172	species	152593	              s__Streptococcus agalactiae
+4.1957	8457	8312	species	139444	              s__Streptococcus pyogenes
+0.0069	14	14	subspecies	140150	                RS_GCF_001638845.2
+0.0060	12	12	subspecies	141623	                RS_GCF_000422045.1
+0.0030	6	6	subspecies	139489	                RS_GCF_000013545.1
+0.0005	1	1	subspecies	140630	                RS_GCF_001678885.1
+0.0005	1	1	subspecies	141173	                RS_GCF_900475165.1
+3.8038	7667	7123	species	92159	              s__Streptococcus pneumoniae
+0.0074	15	15	subspecies	93469	                RS_GCF_001255215.1
+2.1090	4251	4175	species	198237	              s__Streptococcus thermophilus
+1.1019	2221	2019	species	150942	              s__Streptococcus suis
+0.0050	10	10	subspecies	151838	                GB_GCA_002285735.1
+0.8340	1681	1651	species	189681	              s__Streptococcus mutans
+0.6440	1298	996	species	206059	              s__Streptococcus dysgalactiae
+0.0035	7	7	subspecies	206193	                RS_GCF_016724885.1
+0.5939	1197	974	species	245960	              s__Streptococcus gallolyticus
+0.0074	15	15	subspecies	245985	                RS_GCF_000027185.1
+0.5566	1122	312	species	232047	              s__Streptococcus intermedius
+0.5438	1096	877	species	217665	              s__Streptococcus anginosus
+0.4559	919	897	species	174787	              s__Streptococcus equi
+0.4267	860	343	species	203144	              s__Streptococcus suis_P
+0.4267	860	0	species	209648	              s__Streptococcus pseudopneumoniae
+0.4267	860	860	subspecies	209666	                RS_GCF_000221985.1
+0.3602	726	435	species	205294	              s__Streptococcus suis_W
+0.0159	32	32	subspecies	205309	                RS_GCF_902702775.1
+0.0010	2	2	subspecies	205341	                RS_GCF_003285225.1
+0.3433	692	685	species	215880	              s__Streptococcus iniae
+0.2868	578	543	species	238534	              s__Streptococcus constellatus
+0.2808	566	221	species	233544	              s__Streptococcus anginosus_C
+0.2679	540	0	species	486559	              s__Streptococcus pantholopis
+0.2654	535	527	species	247348	              s__Streptococcus parauberis
+0.2312	466	66	species	296124	              s__Streptococcus ilei
+0.2228	449	135	species	282110	              s__Streptococcus macedonicus
+0.2123	428	0	species	392068	              s__Streptococcus oralis_L
+0.1652	333	257	species	241646	              s__Streptococcus pasteurianus
+0.1518	306	144	species	206501	              s__Streptococcus uberis
+0.1354	273	125	species	216173	              s__Streptococcus gordonii
+0.1340	270	0	species	293727	              s__Streptococcus mitis_AK
+0.1325	267	0	species	377205	              s__Streptococcus sp001553685
+0.1062	214	106	species	204484	              s__Streptococcus salivarius
+0.0372	75	75	subspecies	204525	                RS_GCF_000253315.1
+0.1042	210	10	species	247572	              s__Streptococcus parasanguinis
+0.0958	193	188	species	348219	              s__Streptococcus cristatus_B
+0.0853	172	116	species	227640	              s__Streptococcus lutetiensis
+0.0005	1	1	subspecies	227700	                RS_GCF_000441535.1
+0.0501	101	0	species	362090	              s__Streptococcus mitis_Q
+0.0442	89	0	species	268427	              s__Streptococcus oralis_H
+0.0422	85	0	species	424744	              s__Streptococcus mitis_AR
+0.0362	73	6	species	219360	              s__Streptococcus sp001556435
+0.0322	65	0	species	277033	              s__Streptococcus xiaochunlingii
+0.0179	36	0	species	285022	              s__Streptococcus suis_Y
+0.0129	26	8	species	248287	              s__Streptococcus infantarius
+0.0010	2	2	subspecies	248312	                RS_GCF_009755785.1
+0.0124	25	0	species	393202	              s__Streptococcus himalayensis
+0.0114	23	0	species	481502	              s__Streptococcus troglodytae
+0.0094	19	0	species	343178	              s__Streptococcus mitis_K
+0.0060	12	0	species	254134	              s__Streptococcus sanguinis_H
+0.0060	12	0	species	489767	              s__Streptococcus toyakuensis
+0.0055	11	0	species	257721	              s__Streptococcus vestibularis
+0.0055	11	11	subspecies	257737	                RS_GCF_900636445.1
+0.0045	9	2	species	285163	              s__Streptococcus parasuis
+0.0010	2	2	subspecies	285171	                RS_GCF_021654455.1
+0.0040	8	0	species	355637	              s__Streptococcus mitis_BO
+0.0035	7	2	species	232310	              s__Streptococcus oralis
+0.0035	7	0	species	254065	              s__Streptococcus suis_AA
+0.0030	6	0	species	280688	              s__Streptococcus pseudoporcinus
+0.0025	5	1	species	235272	              s__Streptococcus equinus
+0.0025	5	0	species	476570	              s__Streptococcus halotolerans
+0.0025	5	0	species	316754	              s__Streptococcus pseudopneumoniae_E
+0.0020	4	0	species	369123	              s__Streptococcus australis_C
+0.0020	4	0	species	340989	              s__Streptococcus urinalis
+0.0015	3	0	species	310649	              s__Streptococcus hyovaginalis
+0.0015	3	0	species	266679	              s__Streptococcus suis_V
+0.0005	1	1	subspecies	266680	                RS_GCF_024583055.1
+0.0010	2	0	species	255576	              s__Streptococcus canis
+0.0005	1	1	subspecies	255583	                RS_GCF_010993845.2
+0.0010	2	0	species	253667	              s__Streptococcus sp000187445
+0.0005	1	1	subspecies	253689	                RS_GCF_000448665.1
+0.0010	2	0	species	245262	              s__Streptococcus oralis_S
+0.0010	2	0	species	433299	              s__Streptococcus sp008727815
+0.0010	2	0	species	482064	              s__Streptococcus oralis_BR
+0.0005	1	0	species	312681	              s__Streptococcus australis
+0.0005	1	0	species	248057	              s__Streptococcus ruminantium
+0.0005	1	1	species	242004	              s__Streptococcus mitis
+0.0005	1	0	species	469774	              s__Streptococcus oriscaviae
+0.0005	1	0	species	296881	              s__Streptococcus porcinus
+0.0005	1	0	species	229521	              s__Streptococcus sanguinis
+0.0005	1	0	species	504053	              s__Streptococcus sp000448565
+2.6170	5275	206	genus	186509	            g__Lactococcus
+1.9002	3830	3205	species	186510	              s__Lactococcus lactis
+0.0268	54	54	subspecies	186522	                RS_GCF_000025045.1
+0.5829	1175	1048	species	217937	              s__Lactococcus cremoris
+0.0025	5	5	subspecies	217947	                RS_GCF_017068275.1
+0.0273	55	55	species	240536	              s__Lactococcus garvieae
+0.0040	8	1	species	285593	              s__Lactococcus taiwanensis
+0.0005	1	1	subspecies	285598	                RS_GCF_017068355.1
+0.0005	1	0	species	277156	              s__Lactococcus formosensis
+0.0174	35	0	genus	256955	            g__Lactococcus_A
+0.0154	31	0	species	256956	              s__Lactococcus_A carnosus
+0.0020	4	0	species	261903	              s__Lactococcus_A raffinolactis
+0.9793	1974	0	family	239416	          f__Carnobacteriaceae
+0.5656	1140	19	genus	321331	            g__Carnobacterium_A
+0.5552	1119	0	species	321332	              s__Carnobacterium_A inhibens
+0.0010	2	0	species	433903	              s__Carnobacterium_A sp000195575
+0.3269	659	0	genus	294797	            g__Marinilactibacillus
+0.3269	659	0	species	360009	              s__Marinilactibacillus piezotolerans
+0.0868	175	0	genus	239417	            g__Carnobacterium
+0.0868	175	123	species	239418	              s__Carnobacterium maltaromaticum
+0.4242	855	0	family	245357	          f__Aerococcaceae
+0.4187	844	20	genus	245358	            g__Aerococcus
+0.1756	354	0	species	324667	              s__Aerococcus viridans
+0.0943	190	32	species	255103	              s__Aerococcus urinaeequi
+0.0655	132	0	species	276329	              s__Aerococcus sanguinicola
+0.0377	76	76	species	249626	              s__Aerococcus urinae
+0.0347	70	0	species	412954	              s__Aerococcus urinae_A
+0.0010	2	0	species	327060	              s__Aerococcus christensenii
+0.0010	2	2	subspecies	327063	                RS_GCF_001543105.1
+0.0050	10	0	genus	331987	            g__Jeotgalibaca
+0.0050	10	0	species	349558	              s__Jeotgalibaca arthritidis
+0.0005	1	0	genus	266075	            g__Granulicatella
+0.0005	1	0	species	382588	              s__Granulicatella elegans
+0.2714	547	9	family	165659	          f__Lactobacillaceae
+0.2262	456	4	genus	165660	            g__Lactiplantibacillus
+0.2193	442	440	species	165661	              s__Lactiplantibacillus plantarum
+0.0050	10	0	species	265126	              s__Lactiplantibacillus paraplantarum
+0.0342	69	10	genus	196215	            g__Limosilactobacillus
+0.0238	48	48	species	196216	              s__Limosilactobacillus reuteri
+0.0055	11	8	species	217847	              s__Limosilactobacillus reuteri_E
+0.0010	2	2	subspecies	217905	                RS_GCF_013694365.1
+0.0020	4	0	genus	179983	            g__Lactobacillus
+0.0020	4	0	species	203822	              s__Lactobacillus iners
+0.0020	4	0	genus	208734	            g__Leuconostoc
+0.0020	4	4	species	248546	              s__Leuconostoc lactis
+0.0015	3	3	genus	185581	            g__Lacticaseibacillus
+0.0005	1	0	genus	210788	            g__Levilactobacillus
+0.0005	1	0	species	325446	              s__Levilactobacillus zymae
+0.0005	1	0	genus	281587	            g__Liquorilactobacillus
+0.0005	1	0	species	281588	              s__Liquorilactobacillus nagelii
+0.0327	66	3	family	124856	          f__Enterococcaceae
+0.0293	59	0	genus	132571	            g__Enterococcus
+0.0293	59	45	species	132572	              s__Enterococcus faecalis
+0.0015	3	0	genus	124857	            g__Enterococcus_B
+0.0010	2	0	species	180391	              s__Enterococcus_B lactis
+0.0005	1	0	species	124858	              s__Enterococcus_B faecium
+0.0005	1	0	genus	214668	            g__Enterococcus_D
+0.0005	1	0	species	218837	              s__Enterococcus_D casseliflavus
+0.6276	1265	0	order	249320	        o__Haloplasmatales
+0.6276	1265	0	family	249321	          f__Turicibacteraceae
+0.6276	1265	11	genus	249322	            g__Turicibacter
+0.6221	1254	486	species	249323	              s__Turicibacter bilis
+0.1344	271	0	order	63359	        o__Staphylococcales
+0.0759	153	0	family	289714	          f__Gemellaceae
+0.0759	153	0	genus	289715	            g__Gemella
+0.0759	153	134	species	346009	              s__Gemella massiliensis
+0.0585	118	0	family	63360	          f__Staphylococcaceae
+0.0585	118	2	genus	63361	            g__Staphylococcus
+0.0576	116	85	species	222767	              s__Staphylococcus xylosus
+0.0576	116	0	order	195250	        o__Mycoplasmatales
+0.0576	116	0	family	245864	          f__Mycoplasmataceae
+0.0576	116	1	genus	245865	            g__Mycoplasma
+0.0566	114	112	species	245866	              s__Mycoplasma capricolum
+0.0005	1	1	species	343343	              s__Mycoplasma leachii
+0.0074	15	0	order	212333	        o__Erysipelotrichales
+0.0074	15	2	family	219961	          f__Erysipelotrichaceae
+0.0060	12	0	genus	219962	            g__Clostridium_AQ
+0.0060	12	1	species	219963	              s__Clostridium_AQ innocuum
+0.0020	4	4	subspecies	219964	                RS_GCF_012317185.1
+0.0005	1	0	genus	267770	            g__Amedibacterium
+0.0005	1	0	species	267771	              s__Amedibacterium intestinale
+24.5730	49530	0	phylum	14525	    p__Pseudomonadota
+24.4549	49292	19	class	14526	      c__Gammaproteobacteria
+13.9827	28184	0	order	137197	        o__Burkholderiales
+6.7473	13600	10	family	147451	          f__Burkholderiaceae
+6.4560	13013	204	genus	147452	            g__Burkholderia
+3.4525	6959	6953	species	147453	              s__Burkholderia mallei
+0.0005	1	1	subspecies	147925	                RS_GCF_002111285.1
+1.1024	2222	2222	species	179166	              s__Burkholderia multivorans
+0.9550	1925	0	species	290285	              s__Burkholderia metallica
+0.9550	1925	1925	subspecies	290291	                RS_GCF_001718555.1
+0.3939	794	788	species	195494	              s__Burkholderia cepacia
+0.1925	388	382	species	270538	              s__Burkholderia humptydooensis
+0.0933	188	0	species	186202	              s__Burkholderia ubonensis
+0.0352	71	0	species	283793	              s__Burkholderia stabilis
+0.0278	56	0	species	269869	              s__Burkholderia pseudomultivorans
+0.0268	54	52	species	224802	              s__Burkholderia thailandensis
+0.0258	52	0	species	239695	              s__Burkholderia territorii
+0.0124	25	1	species	212217	              s__Burkholderia contaminans
+0.0089	18	6	species	208066	              s__Burkholderia vietnamiensis
+0.0060	12	0	species	446581	              s__Burkholderia cepacia_F
+0.0060	12	12	subspecies	446582	                RS_GCF_001718835.1
+0.0055	11	7	species	214875	              s__Burkholderia orbicola
+0.0050	10	7	species	280782	              s__Burkholderia latens_A
+0.0045	9	0	species	182656	              s__Burkholderia cenocepacia
+0.0020	4	0	species	252524	              s__Burkholderia pyrrocinia
+0.0015	3	0	species	250452	              s__Burkholderia anthina
+0.0015	3	3	subspecies	250474	                RS_GCF_003366075.1
+0.0010	2	0	species	272992	              s__Burkholderia sp905232215
+0.0005	1	0	species	251358	              s__Burkholderia arboris
+0.0005	1	1	species	246546	              s__Burkholderia dolosa
+0.0005	1	0	species	273512	              s__Burkholderia diffusa_B
+0.0005	1	0	species	276144	              s__Burkholderia savannae
+0.0005	1	1	subspecies	276146	                RS_GCF_001524445.2
+0.0005	1	1	species	226163	              s__Burkholderia glumae
+0.0005	1	0	species	329723	              s__Burkholderia ubonensis_B
+0.1821	367	0	genus	317020	            g__Mycetohabitans
+0.1821	367	0	species	350790	              s__Mycetohabitans rhizoxinica
+0.1821	367	367	subspecies	350792	                RS_GCF_000198775.1
+0.0863	174	1	genus	247600	            g__Caballeronia
+0.0461	93	0	species	480684	              s__Caballeronia insecticola
+0.0397	80	25	species	291246	              s__Caballeronia cordobensis
+0.0089	18	0	genus	236669	            g__Polynucleobacter
+0.0089	18	0	species	414916	              s__Polynucleobacter duraquae
+0.0064	13	0	genus	199302	            g__Ralstonia
+0.0035	7	6	species	199303	              s__Ralstonia pseudosolanacearum
+0.0030	6	6	species	205607	              s__Ralstonia solanacearum
+0.0025	5	0	genus	254018	            g__Cupriavidus
+0.0025	5	2	species	282527	              s__Cupriavidus gilardii
+6.5910	13285	1	family	137198	          f__Neisseriaceae
+6.4035	12907	1867	genus	137199	            g__Neisseria
+4.1927	8451	8114	species	137200	              s__Neisseria meningitidis
+0.0020	4	4	subspecies	138144	                RS_GCF_000800235.1
+0.0015	3	3	subspecies	138418	                RS_GCF_001697985.1
+0.0010	2	2	subspecies	138871	                RS_GCF_000026965.1
+0.0005	1	1	subspecies	138513	                RS_GCF_000008805.1
+0.5958	1201	70	species	240685	              s__Neisseria lactamica
+0.5204	1049	891	species	160335	              s__Neisseria gonorrhoeae
+0.0923	186	26	species	288520	              s__Neisseria weaveri
+0.0412	83	0	species	294228	              s__Neisseria polysaccharea
+0.0129	26	0	species	270827	              s__Neisseria flavescens_B
+0.0079	16	0	species	409711	              s__Neisseria sp943181435
+0.0064	13	0	species	369645	              s__Neisseria sicca
+0.0064	13	13	subspecies	369647	                RS_GCF_014054945.1
+0.0040	8	0	species	317582	              s__Neisseria brasiliensis
+0.0040	8	8	subspecies	317586	                RS_GCF_009671065.1
+0.0015	3	2	species	282600	              s__Neisseria mucosa
+0.0005	1	1	species	278643	              s__Neisseria cinerea
+0.0005	1	0	species	305557	              s__Neisseria flavescens
+0.0005	1	0	species	327190	              s__Neisseria macacae
+0.0005	1	0	species	335733	              s__Neisseria sp000090875
+0.1870	377	0	genus	233394	            g__Snodgrassella
+0.1870	377	377	species	233395	              s__Snodgrassella alvi
+0.6445	1299	0	family	233990	          f__Burkholderiaceae_B
+0.4579	923	0	genus	326795	            g__Roseateles
+0.4579	923	0	species	326796	              s__Roseateles depolymerans
+0.1865	376	0	genus	415822	            g__Symbiobacter
+0.1865	376	0	species	415823	              s__Symbiobacter mobilis
+10.3834	20929	0	order	145555	        o__Enterobacterales_A
+10.3834	20929	135	family	171066	          f__Pasteurellaceae
+2.4176	4873	2	genus	181569	            g__Pasteurella
+2.4136	4865	4826	species	181570	              s__Pasteurella multocida
+0.0015	3	0	species	276858	              s__Pasteurella canis
+0.0015	3	3	species	334308	              s__Pasteurella dagmatis
+2.2598	4555	30	genus	198453	            g__Mannheimia
+1.8535	3736	3716	species	198454	              s__Mannheimia haemolytica
+0.3140	633	128	species	294084	              s__Mannheimia varigena
+0.0824	166	166	subspecies	294086	                RS_GCF_000521685.1
+0.0571	115	0	species	493990	              s__Mannheimia sp000521605
+0.0198	40	0	species	313588	              s__Mannheimia pernigra
+0.0005	1	0	species	315325	              s__Mannheimia granulomatis
+1.8094	3647	2428	genus	171067	            g__Haemophilus
+0.2798	564	338	species	214355	              s__Haemophilus influenzae_E
+0.0174	35	35	subspecies	214405	                RS_GCF_900635805.1
+0.0124	25	25	subspecies	214399	                RS_GCF_003691655.1
+0.1379	278	240	species	171068	              s__Haemophilus influenzae
+0.0005	1	1	subspecies	171296	                RS_GCF_019703695.1
+0.1245	251	178	species	236360	              s__Haemophilus influenzae_G
+0.0481	97	40	species	223360	              s__Haemophilus influenzae_D
+0.0030	6	6	subspecies	223406	                RS_GCF_901472485.1
+0.0144	29	26	species	252079	              s__Haemophilus aegyptius
+1.6496	3325	2	genus	203988	            g__Aggregatibacter
+1.4437	2910	2768	species	203989	              s__Aggregatibacter actinomycetemcomitans
+0.2044	412	212	species	255756	              s__Aggregatibacter aphrophilus
+0.0005	1	0	species	286100	              s__Aggregatibacter segnis_A
+0.0005	1	1	subspecies	286102	                RS_GCF_920939465.1
+0.6326	1275	13	genus	221697	            g__Actinobacillus
+0.5601	1129	1105	species	221698	              s__Actinobacillus lignieresii
+0.0645	130	130	species	338418	              s__Actinobacillus equuli
+0.0015	3	3	species	272010	              s__Actinobacillus suis
+0.4053	817	0	genus	244778	            g__Haemophilus_B
+0.4053	817	817	species	244779	              s__Haemophilus_B ducreyi
+0.2897	584	0	genus	298328	            g__Bibersteinia
+0.2897	584	374	species	298329	              s__Bibersteinia trehalosi
+0.0987	199	199	subspecies	298336	                RS_GCF_000521765.1
+0.2624	529	0	genus	245578	            g__Gallibacterium
+0.2624	529	0	species	245579	              s__Gallibacterium anatis
+0.1910	385	0	genus	302601	            g__Basfia_A
+0.1910	385	0	species	394179	              s__Basfia_A succinogenes
+0.1821	367	1	genus	211866	            g__Glaesserella
+0.1811	365	313	species	211867	              s__Glaesserella parasuis
+0.0069	14	14	subspecies	211963	                RS_GCF_001611775.1
+0.0005	1	0	species	368795	              s__Glaesserella australis
+0.1736	350	0	genus	226816	            g__Histophilus
+0.1736	350	325	species	226817	              s__Histophilus somni
+0.0392	79	2	genus	234570	            g__Haemophilus_D
+0.0382	77	0	species	374221	              s__Haemophilus_D parainfluenzae_A
+0.0035	7	0	genus	234714	            g__Avibacterium
+0.0035	7	5	species	234715	              s__Avibacterium paragallinarum
+0.0005	1	1	subspecies	234748	                RS_GCF_019822885.1
+0.0005	1	0	genus	328491	            g__Basfia
+0.0005	1	0	species	328492	              s__Basfia succiniciproducens
+0.0739	149	0	order	108193	        o__Pseudomonadales
+0.0739	149	0	family	115234	          f__Moraxellaceae
+0.0739	149	19	genus	199092	            g__Moraxella
+0.0313	63	61	species	289201	              s__Moraxella ovis
+0.0303	61	54	species	199093	              s__Moraxella catarrhalis
+0.0035	7	7	subspecies	199267	                RS_GCF_000092265.1
+0.0030	6	1	species	308470	              s__Moraxella bovoculi
+0.0035	7	0	order	14527	        o__Enterobacterales
+0.0035	7	0	family	14528	          f__Enterobacteriaceae
+0.0035	7	0	genus	221775	            g__Dickeya
+0.0035	7	0	species	290718	              s__Dickeya chrysanthemi
+0.0020	4	0	order	248141	        o__Cardiobacteriales
+0.0020	4	0	family	293931	          f__Cardiobacteriaceae
+0.0020	4	0	genus	325330	            g__Dichelobacter
+0.0020	4	3	species	325331	              s__Dichelobacter nodosus
+0.1181	238	0	class	159315	      c__Alphaproteobacteria
+0.1161	234	0	order	161314	        o__Rhizobiales
+0.1161	234	0	family	251231	          f__Beijerinckiaceae
+0.1161	234	1	genus	251232	            g__Methylobacterium
+0.1146	231	5	species	251233	              s__Methylobacterium extorquens
+0.0010	2	0	species	355106	              s__Methylobacterium sp001542815
+0.0020	4	0	order	231992	        o__Caulobacterales
+0.0020	4	0	family	231993	          f__Caulobacteraceae
+0.0020	4	0	genus	256529	            g__Brevundimonas
+0.0020	4	0	species	271716	              s__Brevundimonas aurantiaca
+0.0020	4	4	subspecies	271722	                RS_GCF_001310255.1
+15.4885	31219	0	phylum	130123	    p__Campylobacterota
+15.4885	31219	0	class	130124	      c__Campylobacteria
+15.4885	31219	0	order	130125	        o__Campylobacterales
+15.0911	30418	3	family	130126	          f__Campylobacteraceae
+12.9806	26164	1846	genus	130127	            g__Campylobacter_D
+8.7903	17718	17613	species	130128	              s__Campylobacter_D jejuni
+0.0074	15	15	subspecies	132178	                RS_GCF_018176755.1
+0.0030	6	6	subspecies	131915	                RS_GCF_014151305.1
+0.0010	2	2	subspecies	130743	                RS_GCF_001870105.1
+0.0005	1	1	subspecies	131706	                RS_GCF_024333985.1
+2.4747	4988	3274	species	156982	              s__Campylobacter_D coli
+0.1359	274	274	subspecies	157602	                RS_GCF_000583775.1
+0.0709	143	143	subspecies	157989	                RS_GCF_003030205.1
+0.0020	4	4	subspecies	157545	                RS_GCF_000494775.2
+0.5557	1120	38	species	235870	              s__Campylobacter_D lari_C
+0.1265	255	33	species	349745	              s__Campylobacter_D subantarcticus
+0.1101	222	222	subspecies	349746	                RS_GCF_000816305.1
+0.0764	154	152	species	313984	              s__Campylobacter_D peloridis
+0.0010	2	2	subspecies	313985	                RS_GCF_000816785.1
+0.0238	48	5	species	246395	              s__Campylobacter_D concheus
+0.0064	13	3	species	253947	              s__Campylobacter_D lari
+0.0060	12	0	species	219187	              s__Campylobacter_D coli_A
+0.0030	6	0	species	470215	              s__Campylobacter_D jejuni_A
+0.0010	2	0	species	395047	              s__Campylobacter_D ornithocola
+0.0005	1	0	species	275864	              s__Campylobacter_D armoricus
+0.0005	1	0	species	308291	              s__Campylobacter_D novaezeelandiae
+1.4690	2961	1	genus	223433	            g__Campylobacter
+0.7025	1416	1360	species	239020	              s__Campylobacter testudinum
+0.4252	857	846	species	223434	              s__Campylobacter fetus
+0.3403	686	96	species	337248	              s__Campylobacter iguaniorum
+0.0005	1	1	species	244319	              s__Campylobacter lanienae
+0.4197	846	0	genus	269634	            g__Campylobacter_B
+0.3215	648	648	species	328223	              s__Campylobacter_B gracilis
+0.0982	198	5	species	269635	              s__Campylobacter_B ureolyticus
+0.2203	444	0	genus	235684	            g__Campylobacter_A
+0.2203	444	444	species	262032	              s__Campylobacter_A curvus
+0.2629	530	0	family	220300	          f__Arcobacteraceae
+0.2629	530	1	genus	220301	            g__Aliarcobacter
+0.2624	529	11	species	322282	              s__Aliarcobacter defluvii
+0.1340	270	0	family	289181	          f__Sulfurospirillaceae
+0.1340	270	0	genus	289182	            g__Sulfurospirillum
+0.1340	270	0	species	480677	              s__Sulfurospirillum barnesii
+0.0005	1	0	family	164835	          f__Helicobacteraceae
+0.0005	1	1	genus	229167	            g__Helicobacter_C
+11.4113	23001	0	phylum	173790	    p__Bacteroidota
+11.4113	23001	0	class	173791	      c__Bacteroidia
+9.4516	19051	0	order	190476	        o__Flavobacteriales
+7.6021	15323	5	family	190477	          f__Flavobacteriaceae
+3.1231	6295	26	genus	190478	            g__Flavobacterium
+1.1842	2387	2387	species	367596	              s__Flavobacterium psychrophilum_A
+0.5209	1050	1026	species	190479	              s__Flavobacterium psychrophilum
+0.4683	944	352	species	260495	              s__Flavobacterium odoratimimum
+0.3135	632	0	species	313114	              s__Flavobacterium branchiophilum
+0.2947	594	593	species	238655	              s__Flavobacterium columnare
+0.1910	385	0	species	375667	              s__Flavobacterium commune
+0.1211	244	0	species	390091	              s__Flavobacterium profundi_A
+0.0164	33	22	species	268306	              s__Flavobacterium covae
+0.9188	1852	1	genus	291668	            g__Cellulophaga
+0.5636	1136	0	species	333136	              s__Cellulophaga algicola
+0.3379	681	327	species	304935	              s__Cellulophaga lytica
+0.0169	34	0	species	291669	              s__Cellulophaga baltica
+0.5919	1193	0	genus	289704	            g__Croceibacter
+0.5919	1193	0	species	289705	              s__Croceibacter atlanticus
+0.5666	1142	3	genus	319599	            g__Gramella
+0.2902	585	0	species	319600	              s__Gramella flava
+0.2749	554	0	species	381690	              s__Gramella forsetii
+0.3969	800	0	genus	269605	            g__Maribacter
+0.3969	800	0	species	390645	              s__Maribacter hydrothermalis
+0.3969	800	800	subspecies	390646	                RS_GCF_001913155.1
+0.3820	770	0	genus	396832	            g__Seonamhaeicola
+0.3820	770	0	species	515940	              s__Seonamhaeicola sp001971785
+0.3810	768	0	genus	291775	            g__Muricauda
+0.3810	768	0	species	426048	              s__Muricauda ruestringensis
+0.1930	389	0	genus	387778	            g__Lacinutrix
+0.1196	241	0	species	389565	              s__Lacinutrix venerupis
+0.0734	148	0	species	498525	              s__Lacinutrix sp000211855
+0.1781	359	2	genus	258894	            g__Capnocytophaga
+0.1111	224	223	species	258895	              s__Capnocytophaga ochracea
+0.0005	1	1	subspecies	258901	                RS_GCF_001278825.1
+0.0630	127	127	species	347342	              s__Capnocytophaga haemolytica
+0.0025	5	1	species	263065	              s__Capnocytophaga canimorsus
+0.0005	1	0	species	285374	              s__Capnocytophaga periodontitidis
+0.1627	328	0	genus	272326	            g__Aequorivita
+0.1627	328	0	species	436243	              s__Aequorivita sublithincola
+0.1469	296	0	genus	355293	            g__Tenacibaculum_A
+0.1469	296	0	species	476611	              s__Tenacibaculum_A todarodis
+0.1310	264	0	genus	371609	            g__Lutibacter
+0.1310	264	0	species	482488	              s__Lutibacter profundi
+0.1310	264	264	subspecies	482489	                RS_GCF_001543325.1
+0.1300	262	0	genus	216932	            g__Tenacibaculum
+0.1300	262	0	species	244020	              s__Tenacibaculum finnmarkense
+0.1096	221	0	genus	313930	            g__Nonlabens
+0.1096	221	3	species	313931	              s__Nonlabens tegetincola
+0.1082	218	218	subspecies	313935	                RS_GCF_001430865.1
+0.0943	190	0	genus	291096	            g__Polaribacter
+0.0774	156	0	species	394878	              s__Polaribacter vadi
+0.0774	156	156	subspecies	394880	                RS_GCF_001761365.1
+0.0169	34	33	species	318547	              s__Polaribacter reichenbachii
+0.0704	142	0	genus	402051	            g__Sediminicola
+0.0704	142	0	species	402052	              s__Sediminicola sp001430825
+0.0174	35	0	genus	430242	            g__Algibacter_A
+0.0174	35	0	species	430243	              s__Algibacter_A alginicilyticus
+0.0025	5	0	genus	270725	            g__Zunongwangia
+0.0025	5	0	species	270726	              s__Zunongwangia profunda
+0.0020	4	0	genus	336293	            g__Maribacter_A
+0.0020	4	0	species	405061	              s__Maribacter_A sp000153165
+0.0015	3	0	genus	312064	            g__Winogradskyella
+0.0015	3	0	species	456478	              s__Winogradskyella sp000828715
+1.8495	3728	25	family	206791	          f__Weeksellaceae
+0.7650	1542	17	genus	206792	            g__Elizabethkingia
+0.7551	1522	1484	species	206793	              s__Elizabethkingia anophelis
+0.0010	2	0	species	267401	              s__Elizabethkingia bruuniana
+0.0005	1	1	subspecies	267413	                RS_GCF_000955665.1
+0.0005	1	0	species	246697	              s__Elizabethkingia miricola
+0.6137	1237	30	genus	213915	            g__Riemerella
+0.5810	1171	1164	species	213916	              s__Riemerella anatipestifer
+0.0015	3	3	subspecies	213955	                RS_GCF_000295655.1
+0.0005	1	1	subspecies	213966	                RS_GCF_006385095.1
+0.0179	36	0	species	361138	              s__Riemerella anatipestifer_B
+0.2639	532	0	genus	330657	            g__Weeksella
+0.2639	532	532	species	330658	              s__Weeksella virosa
+0.1766	356	1	genus	285932	            g__Ornithobacterium
+0.1761	355	335	species	285933	              s__Ornithobacterium rhinotracheale
+0.0174	35	0	genus	226751	            g__Chryseobacterium
+0.0169	34	0	species	440939	              s__Chryseobacterium sp001456155
+0.0005	1	0	species	400071	              s__Chryseobacterium sp000829375
+0.0005	1	0	genus	379015	            g__Soonwooa
+0.0005	1	0	species	493448	              s__Soonwooa sp011058315
+1.9597	3950	9	order	173792	        o__Bacteroidales
+1.2363	2492	3	family	173793	          f__Bacteroidaceae
+1.2324	2484	30	genus	212100	            g__Prevotella
+0.7526	1517	1491	species	333711	              s__Prevotella fusca
+0.0129	26	26	subspecies	333713	                RS_GCF_001262015.1
+0.2664	537	0	species	263359	              s__Prevotella ruminicola
+0.1707	344	2	species	240274	              s__Prevotella intermedia
+0.0129	26	0	species	330171	              s__Prevotella seregens
+0.0109	22	0	species	370022	              s__Prevotella enoeca
+0.0020	4	0	species	259859	              s__Prevotella nigrescens
+0.0020	4	0	species	260834	              s__Prevotella denticola
+0.0025	5	0	genus	176608	            g__Bacteroides
+0.0025	5	0	species	282363	              s__Bacteroides heparinolyticus
+0.5532	1115	1	family	218299	          f__Porphyromonadaceae
+0.5512	1111	0	genus	218300	            g__Porphyromonas
+0.4371	881	670	species	218301	              s__Porphyromonas gingivalis
+0.1141	230	0	species	317536	              s__Porphyromonas asaccharolytica
+0.0015	3	0	genus	257106	            g__Porphyromonas_A
+0.0015	3	0	species	295294	              s__Porphyromonas_A cangingivalis
+0.1657	334	0	family	184642	          f__Tannerellaceae
+0.1657	334	0	genus	273820	            g__Tannerella
+0.1657	334	74	species	273821	              s__Tannerella forsythia
+0.0605	122	122	subspecies	273822	                RS_GCF_001547875.1
+0.0030	6	6	subspecies	273823	                RS_GCF_001547855.1
+6.1480	12392	0	phylum	122149	    p__Bacillota_A
+6.1480	12392	4	class	122150	      c__Clostridia
+5.0555	10190	0	order	122151	        o__Peptostreptococcales
+4.6526	9378	0	family	122152	          f__Peptostreptococcaceae
+4.4691	9008	158	genus	122153	            g__Clostridioides
+4.3441	8756	8710	species	122154	              s__Clostridioides difficile
+0.0015	3	3	subspecies	123942	                RS_GCF_018884625.1
+0.0461	93	0	species	307403	              s__Clostridioides sp021561035
+0.0005	1	1	species	247686	              s__Clostridioides sp020641055
+0.1836	370	0	genus	414951	            g__Peptoclostridium_A
+0.1836	370	0	species	414952	              s__Peptoclostridium_A acidaminophilum
+0.1836	370	370	subspecies	414953	                RS_GCF_000597865.1
+0.4029	812	0	family	310575	          f__Filifactoraceae
+0.4029	812	0	genus	382430	            g__Filifactor
+0.4029	812	0	species	382431	              s__Filifactor alocis
+0.5507	1110	0	order	190738	        o__Lachnospirales
+0.4455	898	3	family	190739	          f__Lachnospiraceae
+0.4425	892	4	genus	230963	            g__Enterocloster
+0.4406	888	880	species	231833	              s__Enterocloster clostridioformis
+0.0010	2	0	genus	247108	            g__Blautia
+0.0010	2	0	species	247109	              s__Blautia sp001304935
+0.0005	1	0	genus	198670	            g__Blautia_A
+0.0005	1	0	species	198671	              s__Blautia_A wexlerae
+0.1052	212	0	family	256139	          f__Anaerotignaceae
+0.1052	212	0	genus	256140	            g__Anaerotignum
+0.1052	212	0	species	335936	              s__Anaerotignum propionicum
+0.5358	1080	0	order	253548	        o__Eubacteriales
+0.5358	1080	0	family	253549	          f__Eubacteriaceae
+0.5358	1080	1	genus	298091	            g__Acetobacterium
+0.5353	1079	0	species	457288	              s__Acetobacterium woodii
+0.0020	4	0	order	211031	        o__Oscillospirales
+0.0010	2	0	family	211032	          f__Acutalibacteraceae
+0.0010	2	0	genus	304722	            g__Solibaculum
+0.0010	2	0	species	304723	              s__Solibaculum mannosilyticum
+0.0010	2	0	family	213244	          f__Ruminococcaceae
+0.0010	2	0	genus	224086	            g__Ruthenibacterium
+0.0010	2	0	species	224087	              s__Ruthenibacterium lactatiformans
+0.0020	4	0	order	256047	        o__Tissierellales
+0.0020	4	1	family	256048	          f__Peptoniphilaceae
+0.0010	2	0	genus	311720	            g__Fenollaria
+0.0010	2	0	species	311721	              s__Fenollaria massiliensis
+0.0005	1	0	genus	256049	            g__Finegoldia
+0.0005	1	0	species	266440	              s__Finegoldia magna_H
+5.3070	10697	0	phylum	101055	    p__Actinomycetota
+5.1810	10443	6	class	101056	      c__Actinomycetia
+3.8628	7786	1	order	171647	        o__Actinomycetales
+3.2278	6506	0	family	239098	          f__Actinomycetaceae
+1.9890	4009	50	genus	251714	            g__Actinomyces
+0.9149	1844	53	species	318341	              s__Actinomyces oris_A
+0.6182	1246	0	species	440504	              s__Actinomyces radicidentis
+0.4232	853	0	species	405657	              s__Actinomyces sp001278845
+0.0064	13	0	species	271760	              s__Actinomyces oris
+0.0030	6	6	subspecies	271772	                RS_GCF_016127955.1
+0.0010	2	0	species	296132	              s__Actinomyces sp915069725
+0.0005	1	0	species	329644	              s__Actinomyces oris_E
+0.0005	1	1	subspecies	329645	                RS_GCF_005696555.1
+0.2724	549	0	genus	250532	            g__Trueperella
+0.2719	548	282	species	250533	              s__Trueperella pyogenes
+0.0580	117	117	subspecies	250558	                RS_GCF_000816065.1
+0.0005	1	0	species	325866	              s__Trueperella pecoris
+0.2595	523	0	genus	239099	            g__Arcanobacterium
+0.2595	523	523	species	331051	              s__Arcanobacterium haemolyticum
+0.2044	412	0	genus	257480	            g__Mobiluncus
+0.2044	412	412	species	260199	              s__Mobiluncus curtisii
+0.1895	382	0	genus	359559	            g__Boudabousia
+0.1895	382	0	species	413791	              s__Boudabousia tangfeifanii
+0.1756	354	0	genus	321372	            g__Actinotignum
+0.1756	354	0	species	371644	              s__Actinotignum schaalii
+0.1374	277	0	genus	284801	            g__Pauljensenia
+0.1340	270	39	species	322984	              s__Pauljensenia meyeri
+0.1146	231	231	subspecies	322985	                RS_GCF_001262055.1
+0.0035	7	0	species	344684	              s__Pauljensenia marseillensis
+0.6331	1276	0	family	187121	          f__Micrococcaceae
+0.6331	1276	30	genus	227389	            g__Rothia
+0.4128	832	8	species	243373	              s__Rothia dentocariosa
+0.1057	213	0	species	284812	              s__Rothia mucilaginosa_B
+0.0933	188	1	species	248172	              s__Rothia sp001808955
+0.0064	13	0	species	227390	              s__Rothia mucilaginosa
+0.0050	10	10	subspecies	227396	                RS_GCF_015240415.1
+0.0015	3	3	subspecies	227398	                GB_GCA_023303065.1
+0.0015	3	0	family	171648	          f__Bifidobacteriaceae
+0.0015	3	0	genus	171649	            g__Bifidobacterium
+0.0015	3	2	species	227702	              s__Bifidobacterium vaginale
+1.0319	2080	0	order	101057	        o__Mycobacteriales
+1.0319	2080	0	family	101058	          f__Mycobacteriaceae
+1.0319	2080	10	genus	175271	            g__Corynebacterium
+0.3815	769	768	species	208468	              s__Corynebacterium pseudotuberculosis
+0.1404	283	283	species	220809	              s__Corynebacterium glutamicum
+0.1340	270	0	species	337645	              s__Corynebacterium mucifaciens
+0.1275	257	0	species	489620	              s__Corynebacterium epidermidicanis
+0.1275	257	257	subspecies	489621	                RS_GCF_001021025.1
+0.1171	236	236	species	175272	              s__Corynebacterium diphtheriae
+0.1146	231	230	species	236492	              s__Corynebacterium ulcerans
+0.0094	19	0	species	298946	              s__Corynebacterium casei
+0.0015	3	0	species	456171	              s__Corynebacterium rouxii
+0.0005	1	1	species	278231	              s__Corynebacterium silvaticum
+0.0005	1	0	species	344498	              s__Corynebacterium callunae
+0.2833	571	0	order	177040	        o__Propionibacteriales
+0.2833	571	2	family	177041	          f__Propionibacteriaceae
+0.1473	297	0	genus	235364	            g__Propionibacterium
+0.1473	297	257	species	235365	              s__Propionibacterium freudenreichii
+0.0193	39	39	subspecies	235389	                RS_GCF_900016155.1
+0.1349	272	5	genus	177042	            g__Cutibacterium
+0.1320	266	263	species	268366	              s__Cutibacterium modestum
+0.0005	1	1	species	177043	              s__Cutibacterium acnes
+0.1260	254	0	class	214977	      c__Coriobacteriia
+0.1260	254	0	order	214978	        o__Coriobacteriales
+0.1260	254	0	family	240234	          f__Atopobiaceae
+0.1260	254	1	genus	255598	            g__Lancefieldella
+0.1255	253	0	species	369509	              s__Lancefieldella parvula
+1.7999	3628	0	phylum	220636	    p__Bacillota_C
+1.7999	3628	0	class	220637	      c__Negativicutes
+1.7116	3450	0	order	234618	        o__Selenomonadales
+1.7116	3450	0	family	234619	          f__Selenomonadaceae
+0.9020	1818	0	genus	312662	            g__Selenomonas_A
+0.9020	1818	0	species	451947	              s__Selenomonas_A lactilytica
+0.8067	1626	0	genus	293823	            g__Centipeda
+0.6792	1369	1	species	311362	              s__Centipeda felix
+0.1275	257	0	species	410144	              s__Centipeda sp001717585
+0.0030	6	0	genus	389965	            g__Selenomonas
+0.0030	6	0	species	392889	              s__Selenomonas sputigena
+0.0883	178	0	order	224660	        o__Veillonellales
+0.0863	174	0	family	299531	          f__Negativicoccaceae
+0.0863	174	0	genus	299532	            g__Negativicoccus
+0.0863	174	0	species	362754	              s__Negativicoccus massiliensis
+0.0863	174	174	subspecies	362756	                GB_GCA_900155405.1
+0.0020	4	0	family	224661	          f__Veillonellaceae
+0.0020	4	0	genus	224662	            g__Veillonella
+0.0020	4	4	species	324926	              s__Veillonella parvula
+1.5926	3210	0	phylum	230450	    p__Fusobacteriota
+1.5926	3210	0	class	230451	      c__Fusobacteriia
+1.5926	3210	0	order	230452	        o__Fusobacteriales
+1.0751	2167	0	family	230453	          f__Fusobacteriaceae
+0.9104	1835	37	genus	239537	            g__Fusobacterium
+0.3761	758	313	species	275724	              s__Fusobacterium hwasookii
+0.2391	482	210	species	239538	              s__Fusobacterium animalis
+0.1444	291	107	species	255261	              s__Fusobacterium vincentii
+0.0069	14	14	subspecies	255278	                RS_GCF_001296125.1
+0.1166	235	227	species	267613	              s__Fusobacterium nucleatum
+0.0159	32	20	species	240871	              s__Fusobacterium polymorphum
+0.0005	1	1	subspecies	240898	                RS_GCF_019552065.1
+0.1647	332	0	genus	483676	            g__Ilyobacter
+0.1647	332	0	species	483677	              s__Ilyobacter polytropus
+0.5175	1043	0	family	249516	          f__Leptotrichiaceae
+0.1786	360	0	genus	365365	            g__Leptotrichia_A
+0.1786	360	0	species	365366	              s__Leptotrichia_A sp001274535
+0.1290	260	0	genus	249517	            g__Streptobacillus
+0.1290	260	260	species	249518	              s__Streptobacillus moniliformis
+0.1126	227	0	genus	296838	            g__Leptotrichia
+0.1111	224	0	species	441605	              s__Leptotrichia sp001553645
+0.0015	3	0	species	446416	              s__Leptotrichia buccalis
+0.0933	188	0	genus	370575	            g__Sneathia
+0.0933	188	0	species	372282	              s__Sneathia vaginalis
+0.0933	188	188	subspecies	372284	                RS_GCF_000973085.1
+0.0040	8	0	genus	382533	            g__Sebaldella
+0.0040	8	0	species	382534	              s__Sebaldella termitidis
+1.3197	2660	0	phylum	180794	    p__Spirochaetota
+1.3197	2660	0	class	205131	      c__Spirochaetia
+1.3122	2645	0	order	215284	        o__Treponematales
+0.8633	1740	0	family	318324	          f__Breznakiellaceae
+0.6008	1211	0	genus	413360	            g__Leadbettera
+0.6008	1211	0	species	500581	              s__Leadbettera azotonutricia
+0.2620	528	0	genus	500693	            g__Termitinema
+0.2620	528	0	species	513517	              s__Termitinema primitia
+0.0005	1	0	genus	423503	            g__Gracilinema
+0.0005	1	0	species	487030	              s__Gracilinema caldarium
+0.4490	905	0	family	215285	          f__Treponemataceae
+0.1652	333	10	genus	249184	            g__Treponema_B
+0.1543	311	301	species	249185	              s__Treponema_B denticola
+0.0050	10	10	subspecies	249192	                RS_GCF_000008185.1
+0.0035	7	1	species	332628	              s__Treponema_B denticola_B
+0.0010	2	0	species	314844	              s__Treponema_B putidum
+0.0010	2	0	species	352688	              s__Treponema_B denticola_A
+0.0005	1	0	species	481050	              s__Treponema_B denticola_C
+0.0005	1	1	subspecies	481051	                RS_GCF_024400535.1
+0.1464	295	0	genus	294941	            g__Treponema_F
+0.1464	295	0	species	348036	              s__Treponema_F brennaborense
+0.1325	267	0	genus	255353	            g__Treponema_D
+0.1320	266	2	species	267692	              s__Treponema_D succinifaciens
+0.1310	264	264	subspecies	267694	                RS_GCF_000195275.1
+0.0005	1	0	species	291413	              s__Treponema_D peruense
+0.0050	10	0	genus	215286	            g__Treponema
+0.0050	10	10	species	215287	              s__Treponema pallidum
+0.0045	9	0	order	266522	        o__Sphaerochaetales
+0.0045	9	0	family	266523	          f__Sphaerochaetaceae
+0.0045	9	0	genus	272398	            g__Sphaerochaeta
+0.0045	9	0	species	468434	              s__Sphaerochaeta globosa
+0.0025	5	0	order	428269	        o__DSM-6578
+0.0025	5	0	family	428270	          f__DSM-6578
+0.0025	5	0	genus	428271	            g__Spirochaeta_A
+0.0025	5	0	species	513066	              s__Spirochaeta_A thermophila_A
+0.0005	1	0	order	307476	        o__DSM-27196
+0.0005	1	0	family	417840	          f__Salinispiraceae
+0.0005	1	0	genus	428870	            g__Salinispira
+0.0005	1	0	species	428871	              s__Salinispira pacifica
+0.2833	571	0	phylum	265191	    p__Bacillota_B
+0.2719	548	0	class	298109	      c__Desulfotomaculia
+0.2719	548	0	order	298110	        o__Desulfotomaculales
+0.2719	548	0	family	340090	          f__Desulfotomaculaceae
+0.2719	548	0	genus	340091	            g__Desulfotomaculum
+0.2719	548	0	species	503475	              s__Desulfotomaculum reducens
+0.0114	23	0	class	265192	      c__Desulfitobacteriia
+0.0114	23	0	order	265193	        o__Desulfitobacteriales
+0.0114	23	0	family	265194	          f__Desulfitobacteriaceae
+0.0114	23	0	genus	433174	            g__Desulfitobacterium_A
+0.0114	23	0	species	433175	              s__Desulfitobacterium_A metallireducens
+0.0030	6	0	phylum	233593	    p__Deinococcota
+0.0030	6	0	class	233594	      c__Deinococci
+0.0030	6	0	order	233595	        o__Deinococcales
+0.0030	6	0	family	257257	          f__Deinococcaceae
+0.0030	6	0	genus	257258	            g__Deinococcus
+0.0030	6	0	species	325406	              s__Deinococcus geothermalis

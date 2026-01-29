@@ -14,10 +14,13 @@ def parse_mmseqs_tsv(path: Path) -> list[GenericAnnotation]:
                     "Make sure to run mmseqs taxonomy with --tax-lineage"
                 )
 
-            result.append(
-                GenericAnnotation(
-                    fields[0], [NCBIIdentifier(i) for i in fields[8].split(";")]
-                )
-            )
+            classification_field = fields[8].rstrip()
+            if not classification_field:
+                classification = []
+            else:
+                classification = [
+                    NCBIIdentifier(i) for i in classification_field.split(";")
+                ]
+            result.append(GenericAnnotation(fields[0], classification))
 
     return result

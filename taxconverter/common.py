@@ -37,6 +37,7 @@ class NCBIIdentifier:
     # Must not contain a newline, tab or semicolon
     content: str
 
+    # A field of a TSV file, by definition, has no newline or tab
     @classmethod
     def try_from_field(cls, field: str) -> Optional[Self]:
         if ";" in field:
@@ -48,6 +49,8 @@ class NCBIIdentifier:
         return cls("")
 
 
+# This represents an NCBI tax id taken straight from a file, without any
+# validation that it's a known or valid ID.
 @dataclasses.dataclass(frozen=True, slots=True)
 class UnvalidatedIntAnnotation:
     contig_name: str
@@ -67,6 +70,7 @@ class NCBIAnnotation:
     def new_unknown(cls: type[Self], contig_name: str) -> Self:
         return cls(contig_name, [])
 
+
 # Same as NCBIAnnotation, but instead of storing an NCBIID, stores
 # a name directly.
 # Use an NCBIRanks to convert a NCBIAnnotation to this
@@ -82,6 +86,14 @@ class GenericAnnotation:
     def to_string(self) -> str:
         lineage = ";".join([i.content for i in self.clades])
         return f"{self.contig_name}\t{lineage}"
+
+    def get_mmseqs_rank(self) -> str:
+        if not self.clades:
+            return "no rank"
+        elif len(self.clades) > 7:
+            return "subspecies"
+        else:
+            return CANONICAL_RANK_NAMES[len(self.clades) - 1]
 
 
 # This class represents a mapping from NCBIID to the name and rank of that ID,
