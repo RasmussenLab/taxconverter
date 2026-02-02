@@ -9,17 +9,12 @@ Suggestions and contributions are most welcome.
 
 ## Installation
 
-The package is compatible with Python version <=3.11.
-
-```
-pip install taxconverter
-```
-
-Or clone this repo and install the package from the source. 
+Clone this repo and install the package from the source. 
 
 ```
 git clone git@github.com:RasmussenLab/taxconverter.git
 cd taxconverter
+gzip --decompress data/clades.tsv.gz
 pip install -e .
 ```
 
